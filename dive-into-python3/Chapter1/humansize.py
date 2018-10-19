@@ -17,6 +17,19 @@ def approximate_size(size, a_kilobyte_is_1024_byte=True):
 
     raise ValueError('number too large')
 
+import unittest
+
+class TestApproximateSize(unittest.TestCase):
+
+    def setUp(self):
+        self.value = 1000000000000
+
+    def tearDown(self):
+        pass
+
+    def test_approximate_size(self):
+        self.assertEqual('1.0 TB', approximate_size(self.value, False))
+        self.assertEqual('931.0 GiB', approximate_size(self.value))
+
 if __name__ == '__main__':
-    print(approximate_size(1000000000000, False))
-    print(approximate_size(1000000000000))
+    unittest.main()
