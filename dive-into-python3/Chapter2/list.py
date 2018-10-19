@@ -39,3 +39,17 @@ if __name__ == '__main__':
     print(a_list)
     print(a_list.pop(0))
     print(a_list)
+
+    # list as stack
+    a_list = ['a', 'b', 'new', 'mpilgrim', 'new']
+    a_list.append('newnode')
+    print(a_list)
+    print(a_list.pop())
+    print(a_list)
+
+    # list as queue
+    a_list = ['a', 'b', 'new', 'mpilgrim', 'new']
+    a_list.append('newnode')
+    print(a_list)
+    print(a_list.pop(0))
+    print(a_list)
