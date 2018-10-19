@@ -89,6 +89,7 @@ class TestSet(unittest.TestCase):
                 0,
                 len(a_set))
 
+    # 集合运算
     def test_operation(self):
         self.assertEqual(
                 {1, 2, 3, 4, 6},
@@ -103,6 +104,7 @@ class TestSet(unittest.TestCase):
                 {1, 3, 4, 6},
                 self.a_set.symmetric_difference(self.b_set))
 
+    # 子集和超集判断
     def test_subset_and_superset(self):
         a_set = {1, 2}
         b_set = {1, 2, 3}

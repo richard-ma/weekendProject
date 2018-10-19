@@ -35,16 +35,16 @@ class TestList(unittest.TestCase):
                 [0, 1, 2, 3, 4],
                 self.a_list[:])
 
-        # even item
+        # even item 取所有偶数位置元素
         self.assertEqual(
                 [0, 2, 4],
                 self.a_list[0::2])
-        # odd item
+        # odd item 取所有奇数位置元素
         self.assertEqual(
                 [1, 3],
                 self.a_list[1::2])
 
-        # reverse list
+        # reverse list 反序排列元素
         self.assertEqual(
                 [4, 3, 2, 1, 0],
                 self.a_list[::-1])
@@ -114,6 +114,7 @@ class TestList(unittest.TestCase):
                 self.a_list_length - 1,
                 len(a_list))
 
+    # 用list做栈
     def test_list_as_stack(self):
         a_list = copy(self.a_list) # reset a_list
 
@@ -130,6 +131,7 @@ class TestList(unittest.TestCase):
                 len(a_list))
         self.assertEqual(t, item)
 
+    # 用list做队列
     def test_list_as_queue(self):
         a_list = copy(self.a_list) # reset a_list
 
