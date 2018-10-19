@@ -10,6 +10,7 @@ class TestList(unittest.TestCase):
 
     def setUp(self):
         self.a_list = list(range(5))
+        self.a_list_length = len(self.a_list)
 
     def tearDown(self):
         pass
@@ -33,6 +34,7 @@ class TestList(unittest.TestCase):
         self.assertEqual(
                 [0, 1, 2, 3, 4],
                 self.a_list[:])
+
         # even item
         self.assertEqual(
                 [0, 2, 4],
@@ -41,6 +43,7 @@ class TestList(unittest.TestCase):
         self.assertEqual(
                 [1, 3],
                 self.a_list[1::2])
+
         # reverse list
         self.assertEqual(
                 [4, 3, 2, 1, 0],
@@ -80,37 +83,69 @@ class TestList(unittest.TestCase):
                 2,
                 a_list.count('new'))
 
+    def test_remove(self):
+        a_list = copy(self.a_list) # reset a_list
+        del a_list[1]
+        self.assertEqual(
+                self.a_list_length - 1,
+                len(a_list))
+
+        a_list = copy(self.a_list) # reset a_list
+        a_list.remove(3)
+        self.assertEqual(
+                self.a_list_length - 1,
+                len(a_list))
+
+        a_list = copy(self.a_list) # reset a_list
+        item = a_list.pop()
+        self.assertEqual(
+                self.a_list[-1],
+                item)
+        self.assertEqual(
+                self.a_list_length - 1,
+                len(a_list))
+
+        a_list = copy(self.a_list) # reset a_list
+        item = a_list.pop(1)
+        self.assertEqual(
+                self.a_list[1],
+                item)
+        self.assertEqual(
+                self.a_list_length - 1,
+                len(a_list))
+
+    def test_list_as_stack(self):
+        a_list = copy(self.a_list) # reset a_list
+
+        item = 'new'
+        # push
+        a_list.append(item)
+        self.assertEqual(
+                self.a_list_length + 1,
+                len(a_list))
+        #pop
+        t = a_list.pop()
+        self.assertEqual(
+                self.a_list_length,
+                len(a_list))
+        self.assertEqual(t, item)
+
+    def test_list_as_queue(self):
+        a_list = copy(self.a_list) # reset a_list
+
+        item = 'new'
+        # push
+        a_list.append(item)
+        self.assertEqual(
+                self.a_list_length + 1,
+                len(a_list))
+        #pop
+        t = a_list.pop(0)
+        self.assertEqual(
+                self.a_list_length,
+                len(a_list))
+        self.assertEqual(t, self.a_list[0])
 
 
 if __name__ == '__main__':
     unittest.main()
-
-
-
-    # remove
-    a_list = ['a', 'b', 'new', 'mpilgrim', 'new']
-    del a_list[1]
-    self.assertEqual(a_list)
-
-    a_list.remove('new')
-    self.assertEqual(a_list)
-
-    self.assertEqual(a_list)
-    self.assertEqual(a_list.pop())
-    self.assertEqual(a_list)
-    self.assertEqual(a_list.pop(0))
-    self.assertEqual(a_list)
-
-    # list as stack
-    a_list = ['a', 'b', 'new', 'mpilgrim', 'new']
-    a_list.append('newnode')
-    self.assertEqual(a_list)
-    self.assertEqual(a_list.pop())
-    self.assertEqual(a_list)
-
-    # list as queue
-    a_list = ['a', 'b', 'new', 'mpilgrim', 'new']
-    a_list.append('newnode')
-    self.assertEqual(a_list)
-    self.assertEqual(a_list.pop(0))
-    self.assertEqual(a_list)
