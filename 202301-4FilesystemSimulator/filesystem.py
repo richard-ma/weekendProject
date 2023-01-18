@@ -85,5 +85,5 @@ if __name__ == "__main__":
     data = "hello"
     assert fs.write_block(block_id, data) is True
     assert fs.read_block(block_id) == data
-    #fs.write_block(block_id, data)
+    assert fs.get_pwd().get_name() == '/' # root directory name is /
     fs.quit()
