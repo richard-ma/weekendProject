@@ -124,4 +124,5 @@ if __name__ == "__main__":
     assert fs.write_block(block_id, data) is True
     assert fs.read_block(block_id) == data
     assert fs.get_pwd().get_name() == '/' # root directory name is /
+    assert fs.get_pwd().get_current_block() == 0 # root directory block id is 0
     fs.quit()
