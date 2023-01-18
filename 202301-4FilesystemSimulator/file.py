@@ -16,7 +16,7 @@ class AbstrackFile:
     def is_dir(self):
         return isinstance(self, Directory)
 
-    def set_current_block(self, block_id: int):
+    def set_current_block(self, block_id: str):
         self._current_block = block_id
 
     def get_current_block(self):
@@ -25,7 +25,7 @@ class AbstrackFile:
     def get_parent_block(self):
         return self._parent_block
 
-    def set_parent_block(self, block_id: int):
+    def set_parent_block(self, block_id: str):
         self._parent_block = block_id
 
     def __str__(self):
@@ -42,7 +42,7 @@ class File(AbstrackFile):
         super().__init__()
         self._data_blocks = list()
 
-    def _add_data_block(self, block_id: int):
+    def _add_data_block(self, block_id: str):
         self._data_blocks.append(block_id)
 
 
