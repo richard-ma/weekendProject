@@ -75,7 +75,7 @@ class Filesystem:
     def write_block(self, idx: int, data: str):
         if self._block_can_write(idx):
             self._disk[idx].write(data)
-            self._bitmap[idx] = 1
+            self._bitmap[idx] = 1 # update bitmap
             return True
         else:
             raise Exception("Block: {:d} is used. Cann't be written".format(idx))
