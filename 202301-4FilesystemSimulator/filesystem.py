@@ -35,7 +35,7 @@ class Filesystem:
 
             # load root directory information
             root_dir = Directory()
-            root_dir.load_from_block(self._disk[0].read())
+            root_dir.load_from_block(self.read_block(0))
             self._pwd = root_dir
 
     def _save(self, filename: str):
