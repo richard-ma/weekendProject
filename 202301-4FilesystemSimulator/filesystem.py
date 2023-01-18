@@ -1,6 +1,6 @@
 import os
 from block import Block
-from file import File, Directory
+from file import File, Directory, AbstrackFile
 
 
 class Filesystem:
@@ -22,6 +22,17 @@ class Filesystem:
         self._pwd = root_dir
 
     def get_pwd(self):
+        return self._pwd
+
+    # TODO: fix this function
+    def change_dir(self, dire_name: str):
+        children_blocks = self._pwd.get_all_children_block_id()
+        for block_id in children_blocks:
+            d = AbstrackFile()
+            d.load_from_block(self.read_block(block_id))
+            if d.is_dir() and d.get_name().lower() == dire_name.lower():
+                self._pwd = d
+                break
         return self._pwd
 
     def quit(self):
