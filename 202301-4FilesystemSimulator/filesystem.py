@@ -18,6 +18,12 @@ class Filesystem:
         # parent is None represents the directory is root directory
         self.write_block(0, str(root_dir))
 
+        # set pwd
+        self._pwd = root_dir
+
+    def get_pwd(self):
+        return self._pwd
+
     def quit(self):
         # save to data file
         self._save(Filesystem.DATA_FILENAME)
