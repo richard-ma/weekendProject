@@ -33,6 +33,11 @@ class Filesystem:
         if os.path.exists(Filesystem.DATA_FILENAME) and os.path.isfile(Filesystem.DATA_FILENAME):
             self._load(Filesystem.DATA_FILENAME)
 
+            # load root directory information
+            root_dir = Directory()
+            root_dir.load_from_block(self._disk[0].read())
+            self._pwd = root_dir
+
     def _save(self, filename: str):
         with open(filename, 'w+') as f:
             f.writelines([b.read()+'\n' for k, b in self._disk.items()])
