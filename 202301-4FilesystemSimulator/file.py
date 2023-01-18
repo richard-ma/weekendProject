@@ -34,6 +34,10 @@ class AbstrackFile:
 class File(AbstrackFile):
     def __init__(self):
         super().__init__()
+        self._data_blocks = list()
+
+    def _add_data_block(self, block_id: int):
+        self._data_blocks.append(block_id)
 
 
 class Directory(AbstrackFile):
