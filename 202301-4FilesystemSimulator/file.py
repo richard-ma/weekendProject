@@ -1,6 +1,6 @@
 class AbstrackFile:
     def __init__(self):
-        self._start_block = None
+        self._current_block = None
         self._name = ""
         self._parent_block = None
 
@@ -15,6 +15,12 @@ class AbstrackFile:
 
     def is_dir(self):
         return isinstance(self, Directory)
+
+    def set_current_block(self, block_id: int):
+        self._current_block = block_id
+
+    def get_current_block(self):
+        return self._current_block
 
     def get_parent_block(self):
         return self._parent_block
