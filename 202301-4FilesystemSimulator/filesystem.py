@@ -20,23 +20,23 @@ class Filesystem:
 
     def quit(self):
         # save to data file
-        self._save()
+        self._save(Filesystem.DATA_FILENAME)
 
     def load(self):
         # load from data file
-        self._load()
+        if os.path.exists(Filesystem.DATA_FILENAME) and os.path.isfile(Filesystem.DATA_FILENAME):
+            self._load(Filesystem.DATA_FILENAME)
 
-    def _save(self):
-        with open(Filesystem.DATA_FILENAME, 'w+') as f:
+    def _save(self, filename: str):
+        with open(filename, 'w+') as f:
             f.writelines([b.read()+'\n' for k, b in self._disk.items()])
 
-    def _load(self):
-        if os.path.exists(Filesystem.DATA_FILENAME) and os.path.isfile(Filesystem.DATA_FILENAME):
-            with open(Filesystem.DATA_FILENAME, 'r+') as f:
-                idx = 0
-                for line in f.readlines():
-                    self._disk[idx].write(line.strip('\n'))
-                    idx += 1
+    def _load(self, filename: str):
+        with open(filename, 'r+') as f:
+            idx = 0
+            for line in f.readlines():
+                self._disk[idx].write(line.strip('\n'))
+                idx += 1
 
     def _block_can_use(self, idx: int):
         if idx < self._block_count and self._bitmap[idx] == 0:
@@ -69,6 +69,7 @@ class Filesystem:
 
 if __name__ == "__main__":
     fs = Filesystem()
+    fs.load()
     block_id = 33
     data = "hello"
     assert fs.write_block(block_id, data) is True
