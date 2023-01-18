@@ -21,6 +21,32 @@ class Filesystem:
         # set pwd
         self._pwd = root_dir
 
+    def malloc(self, size: int):
+        ret = []
+        counter = size // self._block_size
+        # ceil
+        if counter != size / self._block_size:
+            counter += 1
+
+        for i in range(self._block_count):
+            if self._bitmap[i] == 0:
+                ret.append(i)
+            
+            # success
+            if len(ret) == counter:
+                for i in ret:
+                    self._bitmap[i] = 1
+                return ret
+
+        # failed
+        raise Exception("Not enough disk space.")
+
+    def free(self, block_ids: list):
+        for block_id in block_ids:
+            if block_id == 0:
+                raise Exception("Cann't free root directory!")
+            self._bitmap[block_id] = 0
+
     def get_pwd(self):
         return self._pwd
 
