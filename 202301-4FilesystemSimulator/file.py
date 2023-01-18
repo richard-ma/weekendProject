@@ -73,3 +73,7 @@ if __name__ == "__main__":
     new_d = Directory()
     new_d.load_from_block(str(d))
     assert str(new_d) == str(d)
+
+    af = AbstrackFile()
+    assert af.is_dir() is False
+    assert af.is_file() is False
