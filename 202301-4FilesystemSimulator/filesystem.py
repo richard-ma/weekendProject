@@ -60,7 +60,7 @@ class Filesystem:
                 self._disk[idx].write(line.strip('\n'))
                 idx += 1
 
-    def _block_can_use(self, idx: int):
+    def _block_can_write(self, idx: int):
         if idx < self._block_count and self._bitmap[idx] == 0:
             return True
         else:
@@ -73,7 +73,7 @@ class Filesystem:
             return None
 
     def write_block(self, idx: int, data: str):
-        if idx < self._block_count and self._block_can_use(idx):
+        if self._block_can_write(idx):
             self._disk[idx].write(data)
             self._bitmap[idx] = 1
             return True
