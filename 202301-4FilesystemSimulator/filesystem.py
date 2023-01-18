@@ -15,7 +15,7 @@ class Filesystem:
         # setting block 0: root Directory /
         root_dir = Directory()
         root_dir.set_name("/")
-        root_dir.set_current_block('0')
+        root_dir.set_current_block(0)
         # parent is None represents the directory is root directory
         self.write_block(0, str(root_dir))
 
@@ -118,11 +118,11 @@ class Filesystem:
 
 if __name__ == "__main__":
     fs = Filesystem()
-    # fs.load()
+    fs.load()
     block_id = 33
     data = "hello"
     assert fs.write_block(block_id, data) is True
     assert fs.read_block(block_id) == data
     assert fs.get_pwd().get_name() == '/' # root directory name is /
-    assert fs.get_pwd().get_current_block() == '0' # root directory block id is 0
+    assert fs.get_pwd().get_current_block() == 0 # root directory block id is 0
     fs.quit()
