@@ -13,7 +13,7 @@ class Block:
         return self._data
 
     def __str__(self):
-        return "Block: " + self._data
+        return "Block:" + self._data
 
 
 if __name__ == "__main__":
