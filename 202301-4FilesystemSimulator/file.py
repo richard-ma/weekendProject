@@ -16,7 +16,7 @@ class AbstrackFile:
     def is_dir(self):
         return isinstance(self, Directory)
 
-    def parent_block(self):
+    def get_parent_block(self):
         return self._parent_block
 
     def set_parent_block(self, block_id: int):
