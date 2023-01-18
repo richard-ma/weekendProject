@@ -15,6 +15,7 @@ class Filesystem:
         # setting block 0: root Directory /
         root_dir = Directory()
         root_dir.set_name("/")
+        root_dir.set_current_block(0)
         # parent is None represents the directory is root directory
         self.write_block(0, str(root_dir))
 
