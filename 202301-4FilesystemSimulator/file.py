@@ -1,7 +1,9 @@
+from filesystem import Filesystem
+
+
 class File:
     TYPE_DIRECTORY = 0
     TYPE_FILE = 1
-
 
     def __init__(self):
         self._type = None
@@ -17,17 +19,23 @@ class File:
 
         self._type = t
 
-    def set_name(self, name: str):
-        self._name = name
-    
-    def get_name(self):
-        return self._name
-
     def is_type(self, t: int):
         if t not in [File.TYPE_DIRECTORY, File.TYPE_FILE]:
             raise TypeError("Such file type not found.")
 
         return self._type == t
+
+    def set_buffer(self, data: str):
+        self._data_buffer = data
+
+    def get_buffer(self):
+        return self._data_buffer
+
+    def set_name(self, name: str):
+        self._name = name
+    
+    def get_name(self):
+        return self._name
 
     def set_current_block(self, block_id: int):
         self._current_block = block_id
@@ -105,6 +113,7 @@ if __name__ == "__main__":
     f = File()
     f.set_type(file_data["type"])
     f.set_name(file_data["name"])
+    f.set_buffer(file_data["data_buffer"])
     f.set_current_block(file_data["current_block"])
     f.set_parent_block(file_data["parent_block"])
     for block_id in file_data['children_blocks']:
@@ -122,6 +131,7 @@ if __name__ == "__main__":
         assert f.is_type(File.TYPE_FILE) is True
         assert f.is_type(File.TYPE_DIRECTORY) is False
         assert f.get_name() == file_data["name"]
+        assert f.get_buffer() == file_data["data_buffer"]
         assert f.get_current_block() == file_data["current_block"]
         assert f.get_parent_block() == file_data["parent_block"]
         assert f.get_all_children_block() == file_data["children_blocks"]
