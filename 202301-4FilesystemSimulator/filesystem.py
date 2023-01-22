@@ -103,6 +103,22 @@ class Filesystem:
         # set pwd
         self._pwd = root_dir
 
+    def _save(self, filename: str):
+        with open(filename, 'w+') as f:
+            f.writelines([b.save()+'\n' for k, b in self._disk.items()])
+
+    def _load(self, filename: str):
+        with open(filename, 'r+') as f:
+            idx = 0
+            for line in f.readlines():
+                self._disk[idx].load(line.strip('\n'))
+                idx += 1
+
+    def quit(self):
+        # save to data file
+        self._save(Filesystem.DATA_FILENAME)
+
+
     '''
     def malloc(self, size: int):
         ret = []
@@ -144,10 +160,6 @@ class Filesystem:
                 break
         return self._pwd
 
-    def quit(self):
-        # save to data file
-        self._save(Filesystem.DATA_FILENAME)
-
     def load(self):
         # load from data file
         if os.path.exists(Filesystem.DATA_FILENAME) and os.path.isfile(Filesystem.DATA_FILENAME):
@@ -157,17 +169,6 @@ class Filesystem:
             root_dir = Directory()
             root_dir.load_from_block(self.read_block(0))
             self._pwd = root_dir
-
-    def _save(self, filename: str):
-        with open(filename, 'w+') as f:
-            f.writelines([b.read()+'\n' for k, b in self._disk.items()])
-
-    def _load(self, filename: str):
-        with open(filename, 'r+') as f:
-            idx = 0
-            for line in f.readlines():
-                self._disk[str(idx)].write(line.strip('\n'))
-                idx += 1
     '''
 
     def _debug_print_bitmap(self):
@@ -199,3 +200,5 @@ if __name__ == "__main__":
     assert data == fs.read(block_id)
     fs.free(block_id)
     assert "" == fs.read(block_id)
+
+    fs.quit()
