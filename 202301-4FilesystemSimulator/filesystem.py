@@ -10,8 +10,8 @@ class Filesystem:
         self._block_size = block_size
         self._block_count = block_count
         self._bitmap = [0] * self._block_count
-        self._disk = {str(k): Block(self._block_size) for k in range(self._block_count)}
-
+        self._disk = {k: Block(self._block_size) for k in range(self._block_count)}
+        '''
         # setting block 0: root Directory /
         root_dir = Directory()
         root_dir.set_name("/")
@@ -21,7 +21,21 @@ class Filesystem:
 
         # set pwd
         self._pwd = root_dir
+        '''
 
+    def _is_block_used(self, idx: int):
+        if idx < self._block_count and self._bitmap[idx] == 1:
+            return True
+        else:
+            return False
+
+    def _get_block(self, idx: int):
+        if idx < self._block_count:
+            return self._disk[idx]
+        else:
+            raise IndexError("Block index out of [size: {:d}] {:d}".format(self._block_count, idx))
+
+    '''
     def malloc(self, size: int):
         ret = []
         counter = size // self._block_size
@@ -86,26 +100,7 @@ class Filesystem:
             for line in f.readlines():
                 self._disk[str(idx)].write(line.strip('\n'))
                 idx += 1
-
-    def _block_can_write(self, idx: int):
-        if idx < self._block_count and self._bitmap[idx] == 0:
-            return True
-        else:
-            return False
-
-    def read_block(self, idx: int):
-        if idx < self._block_count:
-            return self._disk[str(idx)].read()
-        else:
-            return None
-
-    def write_block(self, idx: int, data: str):
-        if self._block_can_write(idx):
-            self._disk[str(idx)].write(data)
-            self._bitmap[idx] = 1 # update bitmap
-            return True
-        else:
-            raise Exception("Block: {:d} is used. Cann't be written".format(idx))
+    '''
 
     def _debug_print_bitmap(self):
         idx = 1
