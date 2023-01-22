@@ -8,7 +8,7 @@ class Block:
 
     def write(self, data: str, next_block_id=0):
         if len(data) > self._size - self._next_legnth:
-            raise Exception("Too long for [size: {}]: {}".format(self._size, data))
+            raise Exception("Too long for [size: {:d}]: {:s}".format(self._size, data))
         
         self._data = data
         self._next = next_block_id
@@ -27,7 +27,7 @@ class Block:
 
     def load(self, s: str):
         if len(s) > self._size:
-            raise Exception("Too long for [size: {}]: {}".format(self._size, s))
+            raise Exception("Too long for [size: {:d}]: {:s}".format(self._size, s))
 
         self._data = s[:-self._next_legnth]
         self._next = int(s[-self._next_legnth:])
