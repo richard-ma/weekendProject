@@ -1,10 +1,13 @@
-from filesystem import Filesystem
+import systemcall
 
 
 if __name__ == "__main__":
-    fs = Filesystem()
+    test_data = "this is some test data."*200
 
-    for id, b in fs._disk.items():
-        print(id, b)
+    fp = systemcall.open("test.py")
+    systemcall.write(fp, test_data)
+    systemcall.close(fp)
+    assert systemcall.read(fp) == test_data
+    print(systemcall.read(fp))
 
-    fs.print_bitmap()
+    systemcall.save_to_disk()
