@@ -6,8 +6,9 @@ if __name__ == "__main__":
 
     fp = systemcall.open("test.py")
     systemcall.write(fp, test_data)
-    systemcall.close(fp)
+    systemcall.flush(fp)
     assert systemcall.read(fp) == test_data
     print(systemcall.read(fp))
+    systemcall.close(fp)
 
     systemcall.save_to_disk()
