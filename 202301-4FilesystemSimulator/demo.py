@@ -8,7 +8,6 @@ if __name__ == "__main__":
     systemcall.write(fp, test_data)
     systemcall.flush(fp)
     assert systemcall.read(fp) == test_data
-    print(systemcall.read(fp))
     systemcall.close(fp)
 
     systemcall.logout()
