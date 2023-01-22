@@ -3,7 +3,7 @@ class Block:
         self._size = size
         self._data = ""
 
-        self._next = None
+        self._next = 0 
         self._next_length = next_length
 
 
