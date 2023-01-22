@@ -25,8 +25,12 @@ def read(fp: "File"):
 def save_to_disk():
     fs.quit()
 
+
+
 # systemcall initial
 fs = Filesystem()
+# load from data file
+fs.initial()
 
 # setting block 0: root Directory /
 root_dir = File(fs)
