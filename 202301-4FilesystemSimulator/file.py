@@ -5,13 +5,15 @@ class File:
     TYPE_DIRECTORY = 0
     TYPE_FILE = 1
 
-    def __init__(self):
+    def __init__(self, filesystem: "Filesystem"):
         self._type = None
         self._name = ""
         self._current_block = None
         self._parent_block = None
         self._children_block = list()
         self._data_buffer = ""
+
+        self._filesystem = filesystem
 
     def set_type(self, t: int):
         if t not in [File.TYPE_DIRECTORY, File.TYPE_FILE]:
@@ -110,7 +112,9 @@ if __name__ == "__main__":
         "data_buffer": ""
     }
 
-    f = File()
+    fs = Filesystem()
+
+    f = File(fs)
     f.set_type(file_data["type"])
     f.set_name(file_data["name"])
     f.set_buffer(file_data["data_buffer"])
@@ -119,7 +123,7 @@ if __name__ == "__main__":
     for block_id in file_data['children_blocks']:
         f.add_child(block_id)
 
-    d = File()
+    d = File(fs)
     d.set_type(dire_data["type"])
     d.set_name(dire_data["name"])
     d.set_current_block(dire_data["current_block"])
