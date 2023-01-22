@@ -1,6 +1,5 @@
 import os
 from block import Block
-from file import File
 
 
 class Filesystem:
@@ -16,17 +15,6 @@ class Filesystem:
         self._next_size = len(str(self._block_count))
         self._data_size = self._block_size - self._next_size
         self._disk = {k: Block(self._block_size, self._next_size) for k in range(self._block_count)}
-        '''
-        # setting block 0: root Directory /
-        root_dir = Directory()
-        root_dir.set_name("/")
-        root_dir.set_current_block(0)
-        # parent is None represents the directory is root directory
-        self.write_block(0, str(root_dir))
-
-        # set pwd
-        self._pwd = root_dir
-        '''
 
     def _is_block_used(self, idx: int):
         if idx < self._block_count and self._bitmap[idx] == Filesystem.BLOCK_USED:
@@ -41,21 +29,22 @@ class Filesystem:
             raise IndexError("Block index out of [size: {:d}] {:d}".format(self._block_count, idx))
 
     def _write_block(self, idx: int, data: str, next_block_id=0):
-        if not self._is_block_used(idx):
-            self._disk[idx].write(data, next_block_id)
-            self._bitmap[idx] = Filesystem.BLOCK_USED 
-        else:
-            raise Exception("Block {:d} is used.".format(idx))
+        self._disk[idx].write(data, next_block_id)
 
     def _malloc_one_block(self, start=0):
-        for idx in range(start+1, self._block_count):
+        for idx in range(start, self._block_count):
             if not self._is_block_used(idx): # success
+                self._bitmap[idx] = Filesystem.BLOCK_USED 
                 return idx
 
         # failed
         raise Exception("Not enough disk space.")
 
-
+    def _free_one_block(self, idx: int):
+        block_will_be_free = self._get_block(idx)
+        self._bitmap[idx] = Filesystem.BLOCK_UNUSED # free block
+        self._disk[idx].write("") # remove block data
+        
     def write(self, data: str):
         size = len(data)
 
@@ -88,6 +77,31 @@ class Filesystem:
             data += block.read()
 
         return data
+
+    def free(self, idx: int):
+        block = self._get_block(idx)
+
+        while block.has_next_block():
+            next_block_id = block.get_next_block() # get next block
+            self._free_one_block(idx)
+            block = self._get_block(next_block_id)
+            idx = next_block_id
+
+        self._free_one_block(idx) # free the last block
+
+    def initial(self):
+        from file import File
+
+        # setting block 0: root Directory /
+        root_dir = File()
+        root_dir.set_type(File.TYPE_DIRECTORY)
+        root_dir.set_name("/")
+        root_dir.set_current_block(0)
+        # parent is None represents the directory is root directory
+        self.write(root_dir.save())
+
+        # set pwd
+        self._pwd = root_dir
 
     '''
     def malloc(self, size: int):
@@ -167,22 +181,21 @@ class Filesystem:
 
 if __name__ == "__main__":
     fs = Filesystem()
-    '''
-    fs.load()
-    block_id = 33
-    data = "hello"
-    assert fs.write_block(block_id, data) is True
-    assert fs.read_block(block_id) == data
-    assert fs.get_pwd().get_name() == '/' # root directory name is /
-    assert fs.get_pwd().get_current_block() == 0 # root directory block id is 0
-    fs.quit()
-    '''
+
+    # test initial
+    fs.initial()
+
     # test one block data
     data = "zkzk"*4
     block_id = fs.write(data)
     assert data == fs.read(block_id)
+    fs.free(block_id)
+    print(fs.read(block_id))
+    assert "" == fs.read(block_id)
 
     # test multi blocks data
     data = "zkzk"*1000
     block_id = fs.write(data)
     assert data == fs.read(block_id)
+    fs.free(block_id)
+    assert "" == fs.read(block_id)
