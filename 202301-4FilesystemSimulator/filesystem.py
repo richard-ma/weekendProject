@@ -89,19 +89,6 @@ class Filesystem:
 
         self._free_one_block(idx) # free the last block
 
-    def initial(self):
-        from file import File
-
-        # setting block 0: root Directory /
-        root_dir = File()
-        root_dir.set_type(File.TYPE_DIRECTORY)
-        root_dir.set_name("/")
-        root_dir.set_current_block(0)
-        # parent is None represents the directory is root directory
-        self.write(root_dir.save())
-
-        # set pwd
-        self._pwd = root_dir
 
     def _save(self, filename: str):
         with open(filename, 'w+') as f:
@@ -118,58 +105,10 @@ class Filesystem:
         # save to data file
         self._save(Filesystem.DATA_FILENAME)
 
-
-    '''
-    def malloc(self, size: int):
-        ret = []
-        counter = size // self._block_size
-        # ceil
-        if counter != size / self._block_size:
-            counter += 1
-
-        for i in range(self._block_count):
-            if self._bitmap[i] == 0:
-                ret.append(i)
-            
-            # success
-            if len(ret) == counter:
-                for i in ret:
-                    self._bitmap[i] = 1
-                return ret
-
-        # failed
-        raise Exception("Not enough disk space.")
-
-    def free(self, block_ids: list):
-        for block_id in block_ids:
-            if block_id == 0:
-                raise Exception("Cann't free root directory!")
-            self._bitmap[block_id] = 0
-
-    def get_pwd(self):
-        return self._pwd
-
-    # TODO: fix this function
-    def change_dir(self, dire_name: str):
-        children_blocks = self._pwd.get_all_children_block_id()
-        for block_id in children_blocks:
-            d = AbstrackFile()
-            d.load_from_block(self.read_block(block_id))
-            if d.is_dir() and d.get_name().lower() == dire_name.lower():
-                self._pwd = d
-                break
-        return self._pwd
-
-    def load(self):
-        # load from data file
-        if os.path.exists(Filesystem.DATA_FILENAME) and os.path.isfile(Filesystem.DATA_FILENAME):
-            self._load(Filesystem.DATA_FILENAME)
-
-            # load root directory information
-            root_dir = Directory()
-            root_dir.load_from_block(self.read_block(0))
-            self._pwd = root_dir
-    '''
+    def initial(self):
+        filename = Filesystem.DATA_FILENAME
+        if os.path.exists(filename) and os.path.isfile(filename):
+            self._load(filename)
 
     def _debug_print_bitmap(self):
         idx = 1
@@ -183,7 +122,7 @@ class Filesystem:
 if __name__ == "__main__":
     fs = Filesystem()
 
-    # test initial
+    # load data from data file
     fs.initial()
 
     # test one block data
