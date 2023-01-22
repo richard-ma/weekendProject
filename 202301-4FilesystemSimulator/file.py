@@ -8,7 +8,7 @@ class File:
     def __init__(self, filesystem: "Filesystem"):
         self._type = None
         self._name = ""
-        self._parent_block = None
+        self._parent_block = -1
         self._current_block = None
         self._children_block = list()
         self._data_buffer = ""
