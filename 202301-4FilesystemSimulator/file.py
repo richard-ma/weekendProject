@@ -55,7 +55,7 @@ class File:
         self._current_block = self._filesystem.write(self.save())
 
     def read(self):
-        self.load(self._filesystem.read(self._current_block))
+        self.load(self._filesystem.read(self._current_block), self._current_block)
         return self._data_buffer
 
     def save(self):
@@ -72,13 +72,14 @@ class File:
 
         return ";;".join([head, body])
 
-    def load(self, s: str):
+    def load(self, s: str, block_id: int):
         head, body = s.split(";;")
         self._data_buffer = body
 
         head = head.split(":")
         self._type = int(head[0])
         self._name = head[1]
+        self._current_block = block_id
         self._parent_block = int(head[2])
 
         # deal with empty head[3]
@@ -145,11 +146,11 @@ if __name__ == "__main__":
     dire_assertions(d, dire_data)
 
     s = f.save()
-    f.load(s)
+    f.load(s, 33)
     file_assertions(f, file_data)
 
     s = d.save()
-    d.load(s)
+    d.load(s, 24)
     dire_assertions(d, dire_data)
 
     f.write()
