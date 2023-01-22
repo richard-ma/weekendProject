@@ -3,22 +3,55 @@ class Block:
         self._size = size
         self._data = ""
 
-    def write(self, data: str):
-        if len(data) > self._size:
-            raise Exception("Too long: ", data)
+        self._next = None
+        self._next_legnth = len(str(self._size))
+
+    def write(self, data: str, next_block_id=0):
+        if len(data) > self._size - self._next_legnth:
+            raise Exception("Too long for [size: {}]: {}".format(self._size, data))
         
         self._data = data
+        self._next = next_block_id
 
     def read(self):
         return self._data
 
-    def __str__(self):
-        return "Block:" + self._data
+    def get_next_block(self):
+        return self._next
+
+    def save(self): # save to simulator file
+        return self._data + str(self._next)
+
+    def load(self, s: str):
+        if len(s) > self._size:
+            raise Exception("Too long for [size: {}]: {}".format(self._size, s))
+
+        self._data = s[:-self._next_legnth]
+        self._next = int(s[-self._next_legnth:])
 
 
 if __name__ == "__main__":
-    b = Block(10)
-    b.write("23"*2)
-    assert b.read() == "23"*2
+    block_data = {
+        "size": 10,
+        "data": "23"*2,
+        "next_block_id": 33,
+    }
+    block_data["next_length"] = len(str(block_data["size"]))
 
-    b.write("23"*10)
+
+    b = Block(block_data["size"])
+    b.write(block_data["data"])
+
+    assert b.read() == block_data["data"]
+    assert b._next_legnth == block_data["next_length"]
+
+    b.write(block_data["data"], next_block_id=block_data["next_block_id"])
+    assert b.get_next_block() == block_data["next_block_id"]
+
+    # test save and load
+    s = b.save()
+    b.load(s)
+
+    assert b.read() == block_data["data"]
+    assert b._next_legnth == block_data["next_length"]
+    assert b.get_next_block() == block_data["next_block_id"]
