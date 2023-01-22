@@ -4,10 +4,17 @@ class Block:
         self._data = ""
 
         self._next = None
-        self._next_legnth = len(str(self._size))
+
+    @property
+    def _next_legnth(self):
+        return len(str(self._size))
+
+    @property
+    def _data_length(self):
+        return self._size - self._next_legnth
 
     def write(self, data: str, next_block_id=0):
-        if len(data) > self._size - self._next_legnth:
+        if len(data) > self._data_length:
             raise Exception("Too long for [size: {:d}]: {:s}".format(self._size, data))
         
         self._data = data
@@ -47,6 +54,7 @@ if __name__ == "__main__":
 
     assert b.read() == block_data["data"]
     assert b._next_legnth == block_data["next_length"]
+    assert b._data_length == block_data["size"] - b._next_legnth
     assert b.has_next_block() is False
 
     b.write(block_data["data"], next_block_id=block_data["next_block_id"])
@@ -59,5 +67,6 @@ if __name__ == "__main__":
 
     assert b.read() == block_data["data"]
     assert b._next_legnth == block_data["next_length"]
+    assert b._data_length == block_data["size"] - b._next_legnth
     assert b.get_next_block() == block_data["next_block_id"]
     assert b.has_next_block() is True
