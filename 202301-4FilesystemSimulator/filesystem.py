@@ -1,6 +1,6 @@
 import os
 from block import Block
-from file import File, Directory, AbstrackFile
+from file import File
 
 
 class Filesystem:
