@@ -16,6 +16,9 @@ class Block:
     def read(self):
         return self._data
 
+    def has_next_block(self):
+        return not self._next == 0
+
     def get_next_block(self):
         return self._next
 
@@ -44,9 +47,11 @@ if __name__ == "__main__":
 
     assert b.read() == block_data["data"]
     assert b._next_legnth == block_data["next_length"]
+    assert b.has_next_block() is False
 
     b.write(block_data["data"], next_block_id=block_data["next_block_id"])
     assert b.get_next_block() == block_data["next_block_id"]
+    assert b.has_next_block() is True
 
     # test save and load
     s = b.save()
@@ -55,3 +60,4 @@ if __name__ == "__main__":
     assert b.read() == block_data["data"]
     assert b._next_legnth == block_data["next_length"]
     assert b.get_next_block() == block_data["next_block_id"]
+    assert b.has_next_block() is True
