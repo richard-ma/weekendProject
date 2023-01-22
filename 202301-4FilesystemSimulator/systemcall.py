@@ -22,9 +22,24 @@ def write(fp: "File", data: str):
 def read(fp: "File"):
     return fp.read()
 
-def save_to_disk():
+def logout():
     fs.quit()
 
+# TODO
+def mkdir():
+    pass
+
+def cd():
+    pass
+
+def pwd():
+    pass
+
+def rm():
+    pass
+
+def ls():
+    pass
 
 
 # systemcall initial

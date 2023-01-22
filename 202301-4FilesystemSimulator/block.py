@@ -28,7 +28,9 @@ class Block:
         return self._next
 
     def save(self): # save to simulator file
-        return self._data + str(self._next)
+        next_str = str(self._next)
+        zero_fill = '0'*(self._next_length-len(next_str))
+        return self._data + zero_fill + next_str
 
     def load(self, s: str):
         if len(s) > self._size:

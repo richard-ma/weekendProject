@@ -11,4 +11,4 @@ if __name__ == "__main__":
     print(systemcall.read(fp))
     systemcall.close(fp)
 
-    systemcall.save_to_disk()
+    systemcall.logout()
