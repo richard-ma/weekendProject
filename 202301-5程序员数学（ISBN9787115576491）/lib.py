@@ -57,3 +57,28 @@ def linear_combination(scalars, *vectors):
 
 def transform_standard_basis(transform):
     return (transform((1, 0, 0)), transform((0, 1, 0)), transform((0, 0, 1)))
+
+def multiply_matrix_vector(matrix, vector):
+    return linear_combination(vector, *zip(*matrix))
+
+def multiply_matrix_vector3(matrix, vector): # 同multiply_matrix_vector
+    return tuple(
+        dot(row, vector) for row in matrix
+    )
+
+def matrix_multiply(a, b):
+    return tuple(
+        tuple(dot(row, col) for col in zip(*b)) for row in a
+    )
+
+def infer_matrix(n, transformation):
+    def standard_basis_vector(i):
+        return tuple(1 if i == j else 0 for j in range(n))
+    standard_basis = [standard_basis_vector(i) for i in range(n)]
+
+    cols = [transformation(v) for v in standard_basis]
+
+    return tuple(zip(*cols))
+
+def transpose(matrix):
+    return tuple(zip(matrix))
