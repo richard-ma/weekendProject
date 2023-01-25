@@ -54,3 +54,6 @@ def compose(*args):
 def linear_combination(scalars, *vectors):
     scaled = [scale(s, v) for s, v in zip(scalars, vectors)]
     return add(*scaled)
+
+def transform_standard_basis(transform):
+    return (transform((1, 0, 0)), transform((0, 1, 0)), transform((0, 0, 1)))
