@@ -25,6 +25,10 @@ def to_polar(vector):
     angle = atan2(y, x)
     return (length(vector), angle)
 
+def rotate(rotation_angle, vectors):
+    polars = [to_polar(v) for v in vectors]
+    return [to_cartesian((l, angle + rotation_angle)) for l, angle in polars]
+
 def dot(u, v):
     return sum(coord1 * coord2 for coord1, coord2 in zip(u, v))
 
