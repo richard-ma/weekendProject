@@ -15,6 +15,16 @@ def subtract(v1, v2):
 def distance(v1, v2):
     return length(subtract(v1, v2))
 
+# angle是弧度值 360 = 2*pi
+def to_cartesian(polar_vector):
+    length, angle = polar_vector[0], polar_vector[1]
+    return (length * cos(angle), length * sin(angle))
+
+def to_polar(vector):
+    x, y = vector[0], vector[1]
+    angle = atan2(y, x)
+    return (length(vector), angle)
+
 def dot(u, v):
     return sum(coord1 * coord2 for coord1, coord2 in zip(u, v))
 
