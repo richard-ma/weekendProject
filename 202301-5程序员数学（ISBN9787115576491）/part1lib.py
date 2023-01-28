@@ -30,6 +30,15 @@ def rotate(rotation_angle, vectors):
     polars = [to_polar(v) for v in vectors]
     return [to_cartesian((l, angle + rotation_angle)) for l, angle in polars]
 
+# 两点式求直线解析式
+def standard_form(v1, v2):
+    x1, y1 = v1
+    x2, y2 = v2
+    a = y2 - y1
+    b = x1 - x2
+    c = x1 * y2 + x2 * y1
+    return a, b, c
+
 def intersection(u1, u2, v1, v2):
     a1, b1, c1 = standard_form(u1, u2)
     a2, b2, c2 = standard_form(v1, v2)
