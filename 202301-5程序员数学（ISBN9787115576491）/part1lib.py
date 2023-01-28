@@ -1,4 +1,5 @@
 from math import *
+import numpy as np
 
 def add(*vectors):
     return tuple(map(sum, zip(*vectors)))
@@ -10,7 +11,7 @@ def length(vector):
     return sqrt(sum(coord ** 2 for coord in vector))
 
 def subtract(v1, v2):
-    return tuple((v1[0]-v2[0], v1[1]-v2[1], v1[2]-v2[2]))
+    return tuple((v1[i]-v2[i]) for i in range(len(v1)))
 
 def distance(v1, v2):
     return length(subtract(v1, v2))
@@ -28,6 +29,26 @@ def to_polar(vector):
 def rotate(rotation_angle, vectors):
     polars = [to_polar(v) for v in vectors]
     return [to_cartesian((l, angle + rotation_angle)) for l, angle in polars]
+
+def intersection(u1, u2, v1, v2):
+    a1, b1, c1 = standard_form(u1, u2)
+    a2, b2, c2 = standard_form(v1, v2)
+    m = np.array(((a1, b1), (a2, b2)))
+    c = np.array((c1, c2))
+    return np.linalg.slove(m, c)
+
+def do_segments_intersect(s1, s2):
+    u1, u2 = s1
+    v1, v2 = s2
+    d1, d2 = distance(*s1), distance(*s2)
+    x, y = intersection(u1, u2, v1, v2)
+    return (
+        distance(u1, (x, y)) < d1 and
+        distance(u2, (x, y)) < d1 and
+        distance(v1, (x, y)) < d2 and
+        distance(v2, (x, y)) < d2
+    )
+
 
 def dot(u, v):
     return sum(coord1 * coord2 for coord1, coord2 in zip(u, v))
