@@ -18,8 +18,11 @@ class CombineCsv(App):
             for f in files:
                 input_filename = os.path.join(root, f)
                 name, ext = os.path.splitext(input_filename)
-                if ext == CombineCsv.DEFAULT_EXT:
+                if ext == CombineCsv.DEFAULT_EXT and f != CombineCsv.DEFAULT_OUTPUT_FILENAME:
                     input_data = self.readCsvToDict(input_filename)
+                    for line in input_data:
+                        line['csvname'] = os.path.splitext(f)[0]
+                        line.move_to_end('csvname', False)
                     ret.extend(input_data)
 
             self.writeCsvFromDict(os.path.join(root, CombineCsv.DEFAULT_OUTPUT_FILENAME), ret)
