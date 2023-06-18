@@ -2,8 +2,9 @@ import click
 
 
 @click.command()
-def main():
-    click.echo("hello click")
+@click.option("-n", "--num", help="input a num")
+def main(num):
+    click.echo(f"{num =}")
 
 
 if __name__ == "__main__":
