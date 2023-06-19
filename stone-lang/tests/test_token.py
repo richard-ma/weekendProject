@@ -48,3 +48,14 @@ class TestIdToken(unittest.TestCase):
 
     def test_getText(self):
         assert self.token.getText() == "else"
+
+
+class TestStrToken(unittest.TestCase):
+    def setUp(self):
+        self.token = StrToken(1, "hello")
+
+    def test_isString(self):
+        assert self.token.isString() is True
+
+    def test_getText(self):
+        assert self.token.getText() == "hello"
