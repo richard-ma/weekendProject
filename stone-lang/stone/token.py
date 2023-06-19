@@ -53,7 +53,7 @@ class StrToken(Token):
         super().__init__(line)
         self.literal = string
 
-    def isStrng(self) -> bool:
+    def isString(self) -> bool:
         return True
 
     def getText(self) -> str:
