@@ -13,9 +13,9 @@ class TestLineNumberReader(unittest.TestCase):
         assert self.reader.getLineNumber() == 0
 
     def test_readline(self):
-        assert self.reader.readline() == "line one"
+        assert self.reader.readline() == "line one\n"
         assert self.reader.getLineNumber() == 1
-        assert self.reader.readline() == "line two"
+        assert self.reader.readline() == "line two\n"
         assert self.reader.getLineNumber() == 2
 
     def test_resetLineNumber(self):
@@ -24,3 +24,16 @@ class TestLineNumberReader(unittest.TestCase):
 
         self.reader.resetLineNumber(3)
         assert self.reader.getLineNumber() == 3
+
+
+class TestLexer(unittest.TestCase):
+    def setUp(self):
+        f = io.StringIO("even = 0\nodd = 0\ni = 1\nwhile i < 10 {\nif i % 2 == 0 { // even number\neven = even + 1\n} else {\nodd = odd + 1\n}\ni = i + 1\n}\neven + odd\n")
+        reader = LineNumberReader(f)
+        self.lexer = Lexer(reader)
+
+    def test_toStringLiteral(self):
+        assert self.lexer.toStringLiteral("hello") == "hello"
+        assert self.lexer.toStringLiteral("\n") == '\n'
+        assert self.lexer.toStringLiteral("\"") == '"'
+        assert self.lexer.toStringLiteral("\\") == '\\'
