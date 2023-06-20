@@ -1,7 +1,7 @@
 import re
 from io import IOBase
 from collections import deque
-from token import *
+from stone.token import *
 
 
 class Reader:
