@@ -103,3 +103,23 @@ class BinaryExpr(ASTList):
 
     def operator(self):
         return self.child(1).token().getText()
+
+
+class PrimaryExpr(ASTList):
+    def __init__(self, l: list):
+        super().__init__(l)
+
+    @staticmethod
+    def create(c: list):
+        return c[0] if len(c) == 1 else PrimaryExpr(c)
+
+
+class NegativeExpr(ASTList):
+    def __init__(self, l: list):
+        super().__init__(l)
+
+    def operand(self):
+        return self.child(0)
+    
+    def __str__(self):
+        return "-" + str(self.operand())

@@ -93,3 +93,32 @@ class TestBinaryExpr(unittest.TestCase):
 
     def test_operator(self):
         assert self._binaryExpr.operator() == self._tokens[1].getText()
+
+
+class TestPrimaryExpr(unittest.TestCase):
+    def setUp(self):
+        self._tokens = [
+            IdToken(33, "else"),
+            NumToken(66, 3),
+            StrToken(99, "string_token")
+        ]
+
+        self._astleafs = [ASTLeaf(token) for token in self._tokens]
+        self._astleaf = [ASTLeaf(self._tokens[0])]
+
+    def test_create(self):
+        assert isinstance(PrimaryExpr.create(self._astleaf), ASTree)
+        assert isinstance(PrimaryExpr.create(self._astleafs), PrimaryExpr)
+
+
+class TestNegativeExpr(unittest.TestCase):
+    def setUp(self):
+        self._token = NumToken(66, 3)
+        self._astleafs = [ASTLeaf(self._token)]
+        self._negativeExpr = NegativeExpr(self._astleafs)
+
+    def test_operand(self):
+        assert self._negativeExpr.operand() is self._astleafs[0]
+
+    def test_toString(self):
+        assert str(self._negativeExpr) == "-" + str(self._astleafs[0])
