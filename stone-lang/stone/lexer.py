@@ -26,6 +26,22 @@ class LineNumberReader(Reader):
         return self._lineNumber
 
 
+class ParseException(Exception):
+    def __init__(self, exception=None, msg = None, token = None):
+        if msg and token:
+            super().__init__("Syntax error around " + self.location(token) + ". " + msg)
+        elif msg:
+            super().__init__(msg)
+        elif exception:
+            super().__init__(exception)
+
+    def location(self, token: Token) -> str:
+        if token == Token.EOF:
+            return "the last line"
+        else:
+            return "\"" + token.getText() + "\" at line " + token.getLineNumber()
+
+
 class Lexer:
     def __init__(self, reader: Reader):
         self.regexPat = "\\s*((//.*)|([0-9]+)|(\"(\\\\\"|\\\\\\\\|\\\\n|[^\"])*\")" + \
@@ -59,7 +75,7 @@ class Lexer:
         try:
             line = self.reader.readline()
         except Exception as e:
-            raise Exception(e)
+            raise ParseException(exception=e)
         
         if line is None:
             self.hasMore = False
@@ -74,7 +90,7 @@ class Lexer:
                 self.addToken(lineNo, matcher)
                 pos = matcher.end()
             else:
-                raise Exception("Bad token at line " + lineNo)
+                raise ParseException(msg="Bad token at line " + lineNo)
         self.queue.append(IdToken(lineNo, Token.EOL))
 
     def addToken(self, lineNo, matcher):
