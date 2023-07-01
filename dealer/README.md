@@ -1,0 +1,1 @@
+# A obfuscator for PHP - 一个PHP语言的代码混淆器
