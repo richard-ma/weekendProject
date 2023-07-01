@@ -1,0 +1,136 @@
+<?php
+static $ø§Ý±ÔÌ = 1;
+
+function test() {
+    /*f::$var = '123';
+    f::load_static();
+    echo(f::$var);*/
+    $ŸÓ™ðõ† = array(
+        'a' => 'a',
+    );
+    $ñŒíäýð  = 'load_static';
+    $çëã·‘þ     = (new $ŸÓ™ðõ†['a']());
+    $çëã·‘þ->{$ñŒíäýð}();
+    $çëã·‘þ->$ñŒíäýð();
+    GenericGF::init();
+    print_r(GenericGF::$Œœ—þ£â);
+    /*
+    if (PHP_EOL) {
+    }
+    $aaa[0] = 'a';
+    $aaa[2] = 'init';
+
+    echo $func, PHP_EOL;
+    $i = new ii();
+    $i->init('a', 'b');
+    $_SERVER['s'][0] = 'AZTEC_PARAM';
+    echo GenericGF::${$_SERVER['s'][0]};*/
+}
+
+class f
+{
+    public static $„º°Ð©;
+
+    public static function load_static() {
+        if (self::$„º°Ð©) {
+            echo self::$„º°Ð©, PHP_EOL;
+        }
+    }
+}
+
+
+interface i
+{
+    function init($Ž£—£Ÿë, $çëã·‘þ);
+}
+
+class ii implements i
+{
+
+    function init($çëã·‘þ, $ÉÃóü‡) {
+        echo $çëã·‘þ, $ÉÃóü‡;
+    }
+}
+
+class a
+{
+    public static $„º°Ð©;
+    private       $þ®ØÄžÍ;
+
+
+    public function load_static() {
+        global $ø§Ý±ÔÌ;
+        static $¹ÜÙç™÷;
+        echo $ø§Ý±ÔÌ;
+        $¼‘µä§½ = 'pri';
+        if ($¹ÜÙç™÷) {
+        }
+        if (self::$„º°Ð©) {
+
+        }
+        $this->pri = 1;
+        if ($this->pri) {
+
+        }
+        if ($ø§Ý±ÔÌ) {
+
+        }
+    }
+
+
+}
+
+
+interface QrReader
+{
+    public function decode($¹€¾ž¶);
+
+    public function reset();
+}
+
+
+abstract class Binarizer
+{
+
+    public abstract function getBlackRow($ÆÊ¤˜Áù, $©£‚óÂ›);
+
+    public abstract function getBlackMatrix();
+
+    public abstract function createBinarizer($Ð€»£Ç˜);
+
+}
+
+final class GenericGF
+{
+    public static $Œœ—þ£â;
+    public static $ÞÅ¸ÙÍÌ;
+    public static $Öë¡àžµ;
+    public static $È¸Ï©ß = 6;
+    public static $¯ÖÉìþ¬;
+    public static $³Ñ ŸìÂ;
+    public static $²ØºžˆØ;
+    public static $­ÊÍÉ‡´;
+    private       $†²çÜ¹ø;
+    private       $ŒÏ¨íîÍ;
+    private       $µõïóÍä;
+    private       $É®øÏÃ;
+    private       $À·µ±ø²;
+    private       $Ñ•¯çâÔ;
+    private       $ÐüÈá‡;
+
+
+    public static function Init() {
+        self::$Œœ—þ£â         = new a(0x1069, 4096, 1);
+        self::$ÞÅ¸ÙÍÌ         = new a(0x409, 1024, 1);
+        self::$Öë¡àžµ          = new a(0x43, 64, 1);
+        self::$È¸Ï©ß           = new a(0x13, 16, 1);
+        self::$¯ÖÉìþ¬     = new a(0x011D, 256, 0);
+        self::$³Ñ ŸìÂ = new a(0x012D, 256, 1);
+        self::$²ØºžˆØ          = self::$³Ñ ŸìÂ;
+        self::$­ÊÍÉ‡´     = self::$Öë¡àžµ;
+    }
+
+}
+
+test();
+?>

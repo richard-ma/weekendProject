@@ -1,0 +1,34 @@
+<?php
+namespace z {
+
+    class aa {
+        static $ Ç˜ìÌî = 1;
+
+        function getBlackMatrix() {
+            $‡´Í¸Ú   = 1;
+            $òò‚Úõ‹ = 2;
+            if ($‡´Í¸Ú  >= self::$ Ç˜ìÌî && $òò‚Úõ‹ >= self::$ Ç˜ìÌî) {
+
+            }
+        }
+    }
+
+    class a {
+        public $ñ—é¢ñð;
+
+        function b($ñ—é¢ñð) {
+            $this->$ñ—é¢ñð = $ñ—é¢ñð;
+        }
+    }
+
+    class_alias('\z\a', '\z\b');
+
+    //echo "{$_SERVER[HTTP_HOST]}{$_SERVER[REQUEST_URI]}";
+    //echo $_SERVER['REQUEST_TIME'];
+    $¡Òé×Æ› = new \z\a();
+    $¡Òé×Æ›->b('g');
+    echo $¡Òé×Æ›->g;
+}
+
+
+?>

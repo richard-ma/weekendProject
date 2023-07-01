@@ -1,0 +1,6 @@
+<?php
+error_reporting(E_ERROR;
+$÷œ™›úç = DISCUZ_ROOT . './data/txt_' . $ë”ÚÉ’ . '/';
+$¬¢¿ÁŠó          = 111;
+echo $÷œ™›úç . $¬¢¿ÁŠó;
+?>

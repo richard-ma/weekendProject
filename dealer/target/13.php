@@ -1,0 +1,37 @@
+<?php
+
+class  d
+{
+    static $›Š„Þ‰¾ = array();
+
+    static function test() {
+        echo "test", PHP_EOL;
+        global $³®©Âˆ½;
+        $ Ç¾ÍŽ±           = '/a/b/c/d/';
+        $á ˆñâˆ            = 'array';
+        self::${$á ˆñâˆ}[] = 1;
+        if (1 == 2) {
+        } else {
+            //
+            //$var = [];
+            preg_replace_callback('/(\w+)\/([^\/]+)/', function ($¹Ý‹Ñ) use (&$³®©Âˆ½) {
+                $³®©Âˆ½[$¹Ý‹Ñ[1]] = strip_tags($¹Ý‹Ñ[2]);
+            }, $ Ç¾ÍŽ±);
+            assert($³®©Âˆ½['a'] === 'b');
+            assert($³®©Âˆ½['c'] === 'd');
+            assert(count($³®©Âˆ½) == 2);
+        }
+        $³®©Âˆ½ = array();
+    }
+}
+
+function a() {
+    $€Šúâ™¤ = '123123';
+    return $€Šúâ™¤;
+}
+
+d::test();
+print_r($³®©Âˆ½);
+echo a();
+
+?>
