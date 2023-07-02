@@ -1,7 +1,7 @@
 <?php
 
 $options = array(
-    'remove_whitespace' => TRUE,
+    'remove_whitespace' => FALSE,
     'remove_comment' => TRUE,
     'ob_var' => TRUE,
 );
