@@ -1,7 +1,9 @@
 <?php
 
 $options = array(
-    'ob_var' => TRUE,
+    'remove_whitespace' => FALSE,
+    'remove_comment' => TRUE,
+    'ob_var' => FALSE,
 );
 
 require_once "./dealer.php";
