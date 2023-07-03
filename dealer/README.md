@@ -1,4 +1,4 @@
-# A obfuscator for PHP - 一个PHP语言的代码混淆器
+# dealer: A obfuscator for PHP - 一个PHP语言的代码混淆器
 
 ## 使用方法
 * 本程序需要在Linux系统下运行
