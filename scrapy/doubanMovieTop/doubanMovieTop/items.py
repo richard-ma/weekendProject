@@ -6,7 +6,9 @@
 import scrapy
 
 
-class DoubanmovietopItem(scrapy.Item):
+class MovieItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    pass
+    title = scrapy.Field()
+    rank = scrapy.Field()
+    subject = scrapy.Field()
