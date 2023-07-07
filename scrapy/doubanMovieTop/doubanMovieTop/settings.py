@@ -63,10 +63,10 @@ RANDOMIZE_DOWNLOAD_DELAY = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-ITEM_PIPELINES = {
+# ITEM_PIPELINES = {
 #    "doubanMovieTop.pipelines.DoubanmovietopPipeline": 300,
-    "doubanMovieTop.pipelines.MoviePipeline": 300,
-}
+    # "doubanMovieTop.pipelines.MoviePipeline": 300,
+# }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
