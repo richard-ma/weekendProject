@@ -1,12 +1,16 @@
 import scrapy
-from scrapy import Selector
+from scrapy import Selector, Request
 from doubanMovieTop.items import MovieItem
 
 
 class DoubanSpider(scrapy.Spider):
     name = "douban"
     allowed_domains = ["movie.douban.com"]
-    start_urls = ["https://movie.douban.com/top250"]
+    # start_urls = ["https://movie.douban.com/top250"]
+
+    def start_requests(self):
+        for page in range(10):
+            yield Request(f'https://movie.douban.com/top250?start={page * 25}&filter=')
 
     def parse(self, response):
         sel = Selector(response)
