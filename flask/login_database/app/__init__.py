@@ -11,5 +11,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
 db.init_app(app)
 bcrypt = Bcrypt(app)
 login_manager.init_app(app)
+login_manager.login_view = 'login'
 
 from app import routes

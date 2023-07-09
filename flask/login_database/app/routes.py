@@ -1,5 +1,5 @@
 from flask import render_template, url_for, flash, redirect
-from flask_login import login_user, current_user, logout_user
+from flask_login import login_user, current_user, logout_user, login_required
 
 from app import app, db, bcrypt
 from app.form import RegistrationForm, LoginForm
@@ -70,5 +70,6 @@ def logout():
 
 
 @app.route('/account')
+@login_required
 def account():
     return render_template('account.html', title='Account')
