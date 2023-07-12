@@ -1,0 +1,10 @@
+[program:flaskblog]
+directory=/path/to/flaskblog
+command=/full/path/to/venv/bin/gunicorn -w run:app
+user=linux_username
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+stderr_logfile=/var/log/flaskblog/flaskblog.err.log
+stdout_logfile=/var/log/flaskblog/flaskblog.out.log

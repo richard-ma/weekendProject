@@ -1,0 +1,14 @@
+server {
+    listen 80;
+    server_name 1.2.3.4;
+
+    location /static {
+        alias /path/to/static/folder;
+    }
+
+    location / {
+        proxy_pass http://localhost:8000; # sned to gunicorn
+        include /etc/nginx/proxy_params;
+        proxy_redirect off;
+    }
+}
