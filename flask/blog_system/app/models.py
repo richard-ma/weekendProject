@@ -1,11 +1,10 @@
 from datetime import datetime
 
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, UserMixin
+from flask_login import UserMixin
+from itsdangerous.url_safe import URLSafeTimedSerializer as Serializer
+from itsdangerous.exc import SignatureExpired
 
-
-db = SQLAlchemy()
-login_manager = LoginManager()
+from app import app, db, login_manager
 
 
 @login_manager.user_loader
@@ -20,6 +19,20 @@ class User(db.Model, UserMixin):
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
     posts = db.relationship('Post', backref='author', lazy=True)
+
+    def get_reset_token(self):
+        s = Serializer(app.config['SECRET_KEY'])
+        return s.dumps({'user_id': self.id})
+
+    @staticmethod
+    def verify_reset_token(token, expires_sec=1800):
+        s = Serializer(app.config['SECRET_KEY'])
+        try:
+            #user_id = s.loads(token, max_age=self.expires_sec)['user_id']
+            user_id = s.loads(token, max_age=expires_sec)['user_id']
+        except SignatureExpired:
+            return None
+        return User.query.get(user_id)
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.image_file}')"
