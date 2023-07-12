@@ -1,5 +1,4 @@
 # Flask Login Basic
 
-## Default email and password
-email: admin@blog.com
-password: password
+## Deploy
+1. Get a domain
