@@ -19,5 +19,5 @@ class TestSenderRequests(unittest.TestCase):
         url = self.base_url + "users/"
 
         response = self.sender.get(url)
-        #self.assertTrue(type(response) is dict)
+        self.assertTrue(type(response) is dict)
         self.assertIn('users', response.keys())
