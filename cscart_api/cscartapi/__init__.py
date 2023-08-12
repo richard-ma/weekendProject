@@ -3,6 +3,16 @@ from enum import Enum
 from cscartapi.sender_requests import SenderRequests
 
 
+class CscartAPIException(Exception):
+    def __init__(self, status_code, message):
+        super().__init__(self)
+        self.status_code = status_code
+        self.message = message
+
+    def __str__(self):
+        return "[%s] %s" % (str(self.status_code), str(self.message))
+
+
 class CscartAPI:
     def __init__(self, base_url, username, api_key, api_version='1.0'):
         self.base_url = base_url
@@ -64,12 +74,34 @@ class CscartAPI:
     def commit(self):
         # get url
         url = self.get_url()
+
         # get method
         method = self.method
+
+        response = None
         # call sender to send request
+        if method == 'GET':
+            response = self.sender.get(url)
+        elif method == 'POST':
+            response = self.sender.post(url, self.data)
+        elif method == 'PUT':
+            response = self.sender.put(url, self.data)
+        elif method == 'DELETE':
+            response = self.sender.delete(url)
+        else:
+            raise TypeError(method + " not in sender.Method list.") # 访问方法超出API允许范围
+
         # get response (raise exception when error)
+        if 'message' in response.keys(): # error accourd
+            raise CscartAPIException(response['status'], response['message'])
+
+        # TODO logging
+
         # reset api
+        self.reset()
+
         # return response
+        return response
 
     def get(self, entity: str, id: str | None = None):
         self.method = 'GET' 
