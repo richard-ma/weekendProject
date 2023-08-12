@@ -17,6 +17,7 @@ class CscartAPI:
         self.reset()
 
     def reset(self):
+        self.method = None
         self.entity = None
         self.params = dict()
         self.data = dict()
@@ -61,21 +62,32 @@ class CscartAPI:
         return url
 
     def commit(self):
-        pass
+        # get url
+        url = self.get_url()
+        # get method
+        method = self.method
+        # call sender to send request
+        # get response (raise exception when error)
+        # reset api
+        # return response
 
     def get(self, entity: str, id: str | None = None):
+        self.method = 'GET' 
         self.sets(entity=entity, id=id)
         return self
 
     def create(self, entity: str, data: dict):
+        self.method = 'POST' 
         self.sets(entity=entity, data=data)
         return self
 
     def delete(self, entity: str, id: str):
+        self.method = 'DELETE' 
         self.sets(entity=entity, id=id)
         return self
 
     def update(self, entity: str, id: str, data: dict):
+        self.method = 'PUT' 
         self.sets(entity=entity, id=id, data=data)
         return self
 

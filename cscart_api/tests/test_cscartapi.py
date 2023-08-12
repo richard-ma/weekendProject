@@ -66,6 +66,7 @@ class TestCscartAPI(unittest.TestCase):
 
     def test_reset(self):
         self.api.reset()
+        self.assertIsNone(self.api.method)
         self.assertIsNone(self.api.entity)
         self.assertIsNone(self.api.id)
         self.assertDictEqual(dict(), self.api.params)
@@ -73,6 +74,7 @@ class TestCscartAPI(unittest.TestCase):
 
     def test_get_id_is_None(self):
         obj = self.api.get(self.entity)
+        self.assertEqual(self.api.method, 'GET')
         self.assertEqual(self.entity, self.api.entity)
         self.assertIsNone(self.api.id)
         self.assertDictEqual(dict(), self.api.params)
@@ -81,6 +83,7 @@ class TestCscartAPI(unittest.TestCase):
 
     def test_get_with_id(self):
         obj = self.api.get(self.entity, self.id)
+        self.assertEqual(self.api.method, 'GET')
         self.assertEqual(self.entity, self.api.entity)
         self.assertEqual(self.id, self.api.id)
         self.assertDictEqual(dict(), self.api.params)
@@ -89,6 +92,7 @@ class TestCscartAPI(unittest.TestCase):
 
     def test_create(self):
         obj = self.api.create(self.entity, self.dict_1st)
+        self.assertEqual(self.api.method, 'POST')
         self.assertEqual(self.entity, self.api.entity)
         self.assertIsNone(self.api.id)
         self.assertDictEqual(dict(), self.api.params)
@@ -97,6 +101,7 @@ class TestCscartAPI(unittest.TestCase):
 
     def test_delete(self):
         obj = self.api.delete(self.entity, self.id)
+        self.assertEqual(self.api.method, 'DELETE')
         self.assertEqual(self.entity, self.api.entity)
         self.assertEqual(self.id, self.api.id)
         self.assertDictEqual(dict(), self.api.params)
@@ -105,6 +110,7 @@ class TestCscartAPI(unittest.TestCase):
 
     def test_update(self):
         obj = self.api.update(self.entity, self.id, self.dict_1st)
+        self.assertEqual(self.api.method, 'PUT')
         self.assertEqual(self.entity, self.api.entity)
         self.assertEqual(self.id, self.api.id)
         self.assertDictEqual(dict(), self.api.params)
