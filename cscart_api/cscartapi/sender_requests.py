@@ -13,8 +13,6 @@ class SenderRequests(Sender):
     def send(self, method, url, data=None):
         if method is Method.GET:
             response = requests.get(url, auth=self.basic_auth)
-            print("from get")
-            print(response)
         elif method is Method.POST:
             response = requests.post(url, json=data)
         elif method is Method.PUT:
