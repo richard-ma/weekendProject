@@ -85,7 +85,7 @@ class CscartAPI:
         if data is not None:
             self.update_data(data)
 
-    def order_by(self, key: str, sort_order: Enum('ASC', 'DESC') = 'DESC'):
+    def order_by(self, key: str, sort_order: Enum('asc', 'desc') = 'desc'):
         self.update_params({
             'sort_by': key,
             'sort_order': str(sort_order),

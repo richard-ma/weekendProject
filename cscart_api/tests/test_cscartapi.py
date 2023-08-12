@@ -16,8 +16,8 @@ class TestCscartAPI(unittest.TestCase):
         self.dict_3rd = {'third_key': 'third_value'}
 
         self.sort_key = 'sort_key'
-        self.sort_order_asc = 'ASC'
-        self.sort_order_desc = 'DESC'
+        self.sort_order_asc = 'asc'
+        self.sort_order_desc = 'desc'
 
         self.page = 1
         self.items_per_page = 10
