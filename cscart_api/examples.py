@@ -1,6 +1,7 @@
 import os
 
-from cscartapi import CscartAPI
+from cscartapi import CscartAPI, CscartAPIException
+
 
 
 if __name__ == "__main__":
