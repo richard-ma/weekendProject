@@ -5,9 +5,9 @@ from cscartapi import CscartAPI
 
 if __name__ == "__main__":
     api = CscartAPI(
-        os.environ['CSCART_BASE_URL'],
-        os.environ['CSCART_USERNAME'],
-        os.environ['CSCART_API_KEY'],
+        os.environ['CSCART_BASE_URL'], # cscart url: http://doamin.com
+        os.environ['CSCART_USERNAME'], # admin username
+        os.environ['CSCART_API_KEY'],  # api key
         )
 
     # api.get('orders') # get all order
