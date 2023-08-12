@@ -61,39 +61,44 @@ class TestCscartAPI(unittest.TestCase):
         self.assertDictEqual(dict(), self.api.data)
 
     def test_get_id_is_None(self):
-        self.api.get(self.test_entity)
+        obj = self.api.get(self.test_entity)
         self.assertEqual(self.test_entity, self.api.entity)
         self.assertIsNone(self.api.id)
         self.assertDictEqual(dict(), self.api.params)
         self.assertDictEqual(dict(), self.api.data)
+        self.assertIsInstance(obj, CscartAPI)
 
     def test_get_with_id(self):
-        self.api.get(self.test_entity, self.test_id)
+        obj = self.api.get(self.test_entity, self.test_id)
         self.assertEqual(self.test_entity, self.api.entity)
         self.assertEqual(self.test_id, self.api.id)
         self.assertDictEqual(dict(), self.api.params)
         self.assertDictEqual(dict(), self.api.data)
+        self.assertIsInstance(obj, CscartAPI)
 
     def test_create(self):
-        self.api.create(self.test_entity, self.test_1st_dict)
+        obj = self.api.create(self.test_entity, self.test_1st_dict)
         self.assertEqual(self.test_entity, self.api.entity)
         self.assertIsNone(self.api.id)
         self.assertDictEqual(dict(), self.api.params)
         self.assertDictEqual(self.test_1st_dict, self.api.data)
+        self.assertIsInstance(obj, CscartAPI)
 
     def test_delete(self):
-        self.api.delete(self.test_entity, self.test_id)
+        obj = self.api.delete(self.test_entity, self.test_id)
         self.assertEqual(self.test_entity, self.api.entity)
         self.assertEqual(self.test_id, self.api.id)
         self.assertDictEqual(dict(), self.api.params)
         self.assertDictEqual(dict(), self.api.data)
+        self.assertIsInstance(obj, CscartAPI)
 
     def test_update(self):
-        self.api.update(self.test_entity, self.test_id, self.test_1st_dict)
+        obj = self.api.update(self.test_entity, self.test_id, self.test_1st_dict)
         self.assertEqual(self.test_entity, self.api.entity)
         self.assertEqual(self.test_id, self.api.id)
         self.assertDictEqual(dict(), self.api.params)
         self.assertDictEqual(self.test_1st_dict, self.api.data)
+        self.assertIsInstance(obj, CscartAPI)
 
     def test_get_id_is_None_url(self):
         self.api.get(self.test_entity)
