@@ -1,3 +1,5 @@
+from enum import Enum
+
 from cscartapi.sender_requests import SenderRequests
 
 
@@ -53,7 +55,7 @@ class CscartAPI:
 
         # get params (if it has)
         if len(self.params) > 0:
-            url += '?' + '='.join(self.params)
+            url += '?' + '&'.join(['='.join([k, v]) for k, v in self.params.items()])
 
         # return url
         return url
@@ -82,3 +84,22 @@ class CscartAPI:
         self.set_id(id)
         if data is not None:
             self.update_data(data)
+
+    def order_by(self, key: str, sort_order: Enum('ASC', 'DESC') = 'DESC'):
+        self.update_params({
+            'sort_by': key,
+            'sort_order': str(sort_order),
+        })
+        return self
+
+    def page(self, page: int, items_per_page: int | None = None):
+        self.update_params({'page': str(page)})
+        if items_per_page is not None:
+            self.update_params({'items_per_page': str(items_per_page)})
+        return self
+
+    def filter(self, key: str, value: str):
+        self.update_params({
+            key: value,
+        })
+        return self

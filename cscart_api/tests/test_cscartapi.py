@@ -22,6 +22,9 @@ class TestCscartAPI(unittest.TestCase):
         self.page = 1
         self.items_per_page = 10
 
+        self.filter_key = 'filter_key'
+        self.filter_value = 'filter_value'
+
     def tearDown(self):
         pass
 
@@ -144,3 +147,75 @@ class TestCscartAPI(unittest.TestCase):
             self.api.get_url()
         )
         self.assertDictEqual(self.dict_1st, self.api.data)
+
+    def test_order_by_with_asc(self):
+        self.api.get(self.entity).order_by(self.sort_key, self.sort_order_asc)
+        self.assertDictEqual({
+            'sort_by': self.sort_key,
+            'sort_order': self.sort_order_asc,
+        }, self.api.params)
+
+    def test_order_by_with_desc(self):
+        self.api.get(self.entity).order_by(self.sort_key, self.sort_order_desc)
+        self.assertDictEqual({
+            'sort_by': self.sort_key,
+            'sort_order': self.sort_order_desc,
+        }, self.api.params)
+
+    def test_page_with_default_items_per_page(self):
+        self.api.get(self.entity).page(self.page)
+        self.assertDictEqual({
+            'page': str(self.page),
+        }, self.api.params)
+
+    def test_page_with_items_per_page(self):
+        self.api.get(self.entity).page(self.page, self.items_per_page)
+        self.assertDictEqual({
+            'page': str(self.page),
+            'items_per_page': str(self.items_per_page),
+        }, self.api.params)
+
+    def test_filter(self):
+        self.api.get(self.entity).filter(self.filter_key, self.filter_value)
+        self.assertDictEqual({
+            self.filter_key: self.filter_value,
+        }, self.api.params)
+
+    def test_order_by_with_asc_url(self):
+        self.api.get(self.entity).order_by(self.sort_key, self.sort_order_asc)
+        self.assertTrue(
+            self.api.get_url().endswith('?sort_by=%s&sort_order=%s' % (
+                self.sort_key, 
+                self.sort_order_asc
+                )))
+
+    def test_order_by_with_desc_url(self):
+        self.api.get(self.entity).order_by(self.sort_key, self.sort_order_desc)
+        self.assertTrue(
+            self.api.get_url().endswith('?sort_by=%s&sort_order=%s' % (
+                self.sort_key, 
+                self.sort_order_desc
+                )))
+
+    def test_page_with_default_items_per_page_url(self):
+        self.api.get(self.entity).page(self.page)
+        self.assertTrue(
+            self.api.get_url().endswith('?page=%s' % (
+                self.page
+                )))
+
+    def test_page_with_items_per_page_url(self):
+        self.api.get(self.entity).page(self.page, self.items_per_page)
+        self.assertTrue(
+            self.api.get_url().endswith('?page=%s&items_per_page=%s' % (
+                self.page,
+                self.items_per_page
+                )))
+
+    def test_filter(self):
+        self.api.get(self.entity).filter(self.filter_key, self.filter_value)
+        self.assertTrue(
+            self.api.get_url().endswith('?%s=%s' % (
+                self.filter_key,
+                self.filter_value
+                )))
