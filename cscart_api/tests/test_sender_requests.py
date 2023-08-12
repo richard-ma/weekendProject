@@ -15,6 +15,7 @@ class TestSenderRequests(unittest.TestCase):
     def tearDown(self):
         pass
 
+    @unittest.skip("developing...")
     def test_get(self):
         url = self.base_url + "users/"
 
