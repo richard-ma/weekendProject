@@ -26,6 +26,18 @@ class case_always_fail:
         raise ServerException("Unknown object '{0}'.".format(handler.path))
 
 
+class case_directory_index_file:
+    def index_path(self, handler):
+        return os.path.join(handler.full_path, 'index.html')
+
+    def test(self, handler):
+        return os.path.isdir(handler.full_path) and \
+            os.path.isfile(self.index_path(handler))
+
+    def act(self, handler):
+        handler.handle_file(self.index_path(handler))
+
+
 class RequestHandler(http.server.BaseHTTPRequestHandler):
     Page = '''\
 <html>
@@ -57,6 +69,7 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
     Cases = [
         case_no_file,
         case_existing_file,
+        case_directory_index_file,
         case_always_fail,
     ]
 
