@@ -2,6 +2,30 @@ import http.server
 import os
 
 
+class case_no_file:
+    def test(self, handler):
+        return not os.path.exists(handler.full_path)
+    
+    def act(self, handler):
+        raise ServerException("'{0}' not found.".format(handler.path))
+
+
+class case_existing_file:
+    def test(self, handler):
+        return os.path.isfile(handler.full_path)
+
+    def act(self, handler):
+        handler.handle_file(handler.full_path)
+
+
+class case_always_fail:
+    def test(self, handler):
+        return True
+
+    def act(self, handler):
+        raise ServerException("Unknown object '{0}'.".format(handler.path))
+
+
 class RequestHandler(http.server.BaseHTTPRequestHandler):
     Page = '''\
 <html>
@@ -30,6 +54,12 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
     </html>
 '''
 
+    Cases = [
+        case_no_file,
+        case_existing_file,
+        case_always_fail,
+    ]
+
     def create_page(self):
         values = {
             'date_time'   : self.date_time_string(),
@@ -50,13 +80,14 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
 
     def do_GET(self):
         try:
-            full_path = os.getcwd() + self.path
-            if not os.path.exists(full_path):
-                raise ServerException("'{0}' not found.".format(self.path))
-            elif os.path.isfile(full_path):
-                self.handle_file(full_path)
-            else:
-                raise ServerException("Unknown object '{0}'".format(self.path))
+            self.full_path = os.getcwd() + self.path
+
+            for case in self.Cases:
+                handler = case()
+                if handler.test(self):
+                    handler.act(self)
+                    break
+
         except Exception as msg:
             self.handle_error(msg)
 
