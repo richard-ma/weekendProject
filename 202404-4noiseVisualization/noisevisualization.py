@@ -5,6 +5,8 @@ import numpy as np
 # sudo apt-get install portaudio19-dev python3-all-dev
 # pip install pyaudio
 import pyaudio
+# pip install matplotlib
+import matplotlib.pyplot as plt
 
 p = pyaudio.PyAudio()
 
@@ -20,7 +22,7 @@ while True:
     data = np.fromstring(stream.read(1024), dtype=np.int16)
 
     volume = np.max(data)
-    print(volume) # max: 16383
+    print(volume)
 
 stream.stop_stream()
 stream.close()
