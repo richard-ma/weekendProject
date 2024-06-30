@@ -128,8 +128,8 @@ class LeaveDetail:
     def gen_leave_days(self):
         # 根据起始日期和结束日期计算请假天数
         days = -1 
-        start_date = datetime.datetime.strptime(self._start_date, '%Y-%m-%d')
-        end_date = datetime.datetime.strptime(self._end_date, '%Y-%m-%d')
+        start_date = datetime.datetime.strptime(self._start_date, '%Y/%m/%d')
+        end_date = datetime.datetime.strptime(self._end_date, '%Y/%m/%d')
         days = (end_date - start_date).days + 1
         return days
 
