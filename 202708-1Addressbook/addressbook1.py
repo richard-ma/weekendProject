@@ -77,7 +77,27 @@ class Person(Party):
 
 
 class Organization(Party):
-    pass
+    def __init__(self, name):
+        super().__init__(name)
+        self._children = list()
+    
+    def add_child(self, child):
+        if isinstance(child, Party):
+            self._children.append(child)
+        else:
+            raise ValueError("Not valid value type")
+
+    def __str__(self):
+        ret = super().__str__()
+
+        temp = ''
+        if self._children:
+            temp += 'Items: \n'
+            for item in self._children:
+                temp += item.__str__() + '\n'
+        
+            temp = temp.replace('\n', '\n\t')
+        return ret + temp
 
 
 if __name__ == "__main__":
@@ -96,6 +116,19 @@ if __name__ == "__main__":
     o.add(Email('hello@hello.com'))
     o.add(Email('bye@bye.com'))
 
+    parent_o = Organization("Parent")
+    parent_o.add(TelNumber('25122131257'))
+    parent_o.add(TelNumber('35122131257'))
+    parent_o.add(Address('hello street'))
+    parent_o.add(Address('bye street'))
+    parent_o.add(Email('hello@hello.com'))
+    parent_o.add(Email('bye@bye.com'))
+
+    parent_o.add_child(p)
+    parent_o.add_child(o)
+
     print(p)
     print("-"*80)
     print(o)
+    print("-"*80)
+    print(parent_o)
