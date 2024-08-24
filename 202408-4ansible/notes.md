@@ -45,8 +45,16 @@
 
 ## Playbook
 
-1. 使用YAML语法编写
+### Playbook语法
+
+1. 使用YAML语法编写，扩展名为yml
 1. 每个play包括两部分
     1. 目标主机组pattern
     1. 一个或多个任务task
-    
+
+### Playbook执行
+
+1. 使用ansible-playbook执行playbook
+    1. 使用--check参数检查playbook，检查后再到生产环境运行
+    1. 检查playbook常用参数--check, --diff, --list-hosts, --list-tasks, --syntax-check
+    1. ansible-lint是检查规范playbook的工具
