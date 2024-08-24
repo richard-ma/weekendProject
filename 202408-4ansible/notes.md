@@ -42,6 +42,7 @@
 1. ansible [pattern 主机或主机组] -m [module 使用的模块名称] -a "[module options 该模块对应的参数]"
 1. 默认模块为command，但这个模块无法执行重定向等操作，如需复杂shell命令可以使用shell模块
 1. 应了解最基本的一些常用模块及其参数
+1. 使用become将普通用户变为root执行一些操作
 
 ## Playbook
 
