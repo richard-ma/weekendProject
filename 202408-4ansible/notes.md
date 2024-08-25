@@ -77,7 +77,56 @@
 
 ### Playbook执行
 
+1. playbook的task顺序执行
 1. 使用ansible-playbook执行playbook
-    1. 使用--check参数检查playbook，检查后再到生产环境运行
+    1. 使用--check参数检查playbook，并不直接在主机上运行任务，用于检查playbook，确认后再到生产环境运行
     1. 检查playbook常用参数--check, --diff, --list-hosts, --list-tasks, --syntax-check
     1. ansible-lint是检查规范playbook的工具
+1. 执行结果颜色
+    1. 绿色：成功，目标系统没有任何改变
+    1. 黄色：成功，目标系统有改变
+    1. 红色：失败
+
+### Variables
+
+1. 用于debug
+1. 使用vars在playbook开头定义
+1. 语法使用jinja2模板语法
+
+### ansible facts
+
+1. ansible all -m setup
+
+### 程序结构：分支和循环
+
+1. when: my_mood == "happy"
+1. register: 将结果作为变量，方便后续task调用判断
+1. notify：调用handler
+1. loop：循环列表，使用{{item}}调用每次循环的值
+
+## Templating
+
+1. 使用jinja2模板
+1. 用于对不同主机服务的配置文件书写，可以在传递配置文件时进行模板替换，达到对不同主机的适配
+1. 模板可以使用默认值，如果playbook没有指定变量则使用默认值{{ variable-name | default(default-value)}}
+
+## Roles
+
+1. 目录结构
+    1. defaults 默认值
+    1. handlers
+    1. meta
+    1. README.md
+    1. tasks
+    1. templates
+    1. tests
+    1. vars
+
+## Collections
+
+1. Modules
+1. Playbooks
+1. Roles
+1. Plugins
+1. Docs
+1. Tests
