@@ -1,0 +1,11 @@
+---
+- name: Update Ubuntu or based system
+  hosts: test
+  become: true
+  become_user: root
+
+  tasks:
+    - name: Upgrade the OS (apt-get dist-upgrade)
+      ansible.builtin.apt:
+        upgrade: dist
+        update_cache: true
