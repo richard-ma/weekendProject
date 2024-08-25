@@ -1,5 +1,20 @@
 # Ansible
 
+## 基本元素与概念
+
+1. Inventory
+    1. 用于管理的node节点主机信息，这里可以对主机节点进行分组管理
+1. Playbooks
+    1. 用于完成某些任务的程序
+1. Plugins
+    1. 辅助功能，比如become用于以root用户执行，cache用于缓存等
+1. Modules
+    1. 执行playbook中任务的模块，比如shell用于执行命令，apt用来安装程序等
+1. Roles
+    1. 可复用的playbook代码
+1. Collections
+    1. 以上所有这些打包为Collection
+
 ## Installing
 
 1. 主控机一定需要是Linux系统，并且安装有Python解释器
