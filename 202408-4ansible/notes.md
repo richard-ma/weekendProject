@@ -130,3 +130,9 @@
 1. Plugins
 1. Docs
 1. Tests
+
+## Automation Hub
+
+1. 用户控制的
+1. 用户私有
+1. 受信任的数据源
