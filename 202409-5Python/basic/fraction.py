@@ -17,6 +17,11 @@ class Fraction:
         self.num = top // common
         self.den = bottom // common
 
+    # 练习1.8 6题：解决分母为负的问题
+        if self.den < 0:
+            self.num = -self.num
+            self.den = abs(self.den)
+
     def show(self):
         print(self.num, '/', self.den)
 
@@ -109,3 +114,6 @@ if __name__ == "__main__":
     print(other_f < f) # True
     print(f >= f) # True
     print(f <= f) # True
+
+    negative = Fraction(2, -5)
+    print(negative)
