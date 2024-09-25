@@ -27,6 +27,7 @@ class Fraction:
 
     def __str__(self) -> str:
         return str(self.num) + '/' + str(self.den)
+    # 练习1.8 9题：__repr__，当__str__方法没有实现，则用于返回字符串，相当于__str__
 
     def __add__(self, otherfraction):
         new_num = self.num * otherfraction.den + \
@@ -34,6 +35,8 @@ class Fraction:
         new_den = self.den * otherfraction.den
 
         return Fraction(new_num, new_den)
+    # 练习1.8 7题：当__add__方法没有实现，对象又在加号右侧，尝试调用__radd__函数
+    # 练习1.8 8题：__iadd__对应+=运算符
 
     # 练习1.8 3题：添加方法
     def __sub__(self, otherfraction):
