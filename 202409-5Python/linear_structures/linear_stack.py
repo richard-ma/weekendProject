@@ -18,6 +18,35 @@ class Stack:
 
     def size(self):
         return len(self._data)
+
+# 栈应用：括号匹配检测
+def parChecker(symbolString):
+    s = Stack()
+    balanced = True # 标记括号是否匹配
+    index = 0
+    while index < len(symbolString) and balanced:
+        symbol = symbolString[index]
+        if symbol in "([{":
+            s.push(symbol)
+        else:
+            if s.isEmpty():
+                balanced = False
+            else:
+                top = s.pop()
+                if not matches(top, symbol):
+                    balanced = False
+        
+        index += 1
+    
+    if balanced and s.isEmpty(): # 如果栈中有剩余括号，就说明没有完全匹配
+        return True
+    else:
+        return False
+
+def matches(open, close):
+    opens = "([{"
+    closers = ")]}"
+    return opens.index(open) == closers.index(close)
         
 
 if __name__ == "__main__":
@@ -34,3 +63,10 @@ if __name__ == "__main__":
     print(s.pop())
     print(s.pop())
     print(s.size())
+
+
+    print(parChecker('((()))'))
+    print(parChecker('((())'))
+
+    print(parChecker('{({([][])}())}'))
+    print(parChecker('[{()]'))
