@@ -47,6 +47,98 @@ def matches(open, close):
     opens = "([{"
     closers = ")]}"
     return opens.index(open) == closers.index(close)
+
+
+# 栈应用：十进制转换二进制
+def divideBy2(decNumber):
+    remstack = Stack()
+
+    while decNumber > 0:
+        rem = decNumber % 2
+        remstack.push(rem)
+        decNumber = decNumber // 2
+
+    binString = ""
+    while not remstack.isEmpty():
+        binString = binString + str(remstack.pop())
+
+    return binString
+
+def baseConverter(decNumber, base):
+    digits = "0123456789ABCDEF"
+
+    remstack = Stack()
+
+    while decNumber > 0:
+        rem = decNumber % base
+        remstack.push(rem)
+        decNumber = decNumber // base
+
+    newString = ""
+    while not remstack.isEmpty():
+        newString = newString + digits[remstack.pop()]
+    
+    return newString
+
+
+# 栈应用：中序表达式变后序表达式（逆波兰表达式）
+def infixToPostfix(infixexpr):
+    prec = {}
+    prec['*'] = 3
+    prec['/'] = 3
+    prec['+'] = 2
+    prec['-'] = 2
+    prec['('] = 1
+    opStack = Stack()
+    postfixList = []
+    tokenList = infixexpr.split()
+
+    for token in tokenList:
+        if token in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" or token in "0123456789":
+            postfixList.append(token)
+        elif token == '(':
+            opStack.push(token)
+        elif token == ')':
+            topToken = opStack.pop()
+            while topToken != '(':
+                postfixList.append(topToken)
+                topToken = opStack.pop()
+        else:
+            while (not opStack.isEmpty()) and \
+                (prec[opStack.peek()] >= prec[token]):
+                    postfixList.append(opStack.pop())
+            opStack.push(token)
+    
+    while not opStack.isEmpty():
+        postfixList.append(opStack.pop())
+    
+    return " ".join(postfixList)
+
+
+def postfixEval(postfixExpr):
+    operandStack = Stack()
+    tokenList = postfixExpr.split()
+
+    for token in tokenList:
+        if token in "0123456789":
+            operandStack.push(int(token))
+        else:
+            operand2 = operandStack.pop()
+            operand1 = operandStack.pop()
+            result = doMath(token, operand1, operand2)
+            operandStack.push(result)
+
+    return operandStack.pop()
+
+def doMath(op, op1, op2):
+    if op == "*":
+        return op1 * op2
+    elif op == "/":
+        return op1 / op2
+    elif op == "+":
+        return op1 + op2
+    else:
+        return op1 - op2
         
 
 if __name__ == "__main__":
@@ -70,3 +162,16 @@ if __name__ == "__main__":
 
     print(parChecker('{({([][])}())}'))
     print(parChecker('[{()]'))
+
+    print(divideBy2(42))
+
+    print(baseConverter(25, 2))
+    print(baseConverter(25, 8))
+    print(baseConverter(25, 10))
+    print(baseConverter(25, 16))
+
+    print(infixToPostfix("A * B + C * D"))
+    print(infixToPostfix("( A + B ) * C - ( D - E ) * ( F + G )"))
+
+    print(postfixEval('7 8 + 3 2 + /'))
+    print(postfixEval(infixToPostfix("( 7 + 8 ) / ( 3 + 2 )")))
