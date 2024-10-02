@@ -35,7 +35,7 @@ def hotPotato(namelist, num):
 
 
 class Printer:
-    def __init__(self) -> None:
+    def __init__(self, ppm) -> None:
         self.pagerate = ppm
         self.currentTask = None
         self.timeRemaining = 0
