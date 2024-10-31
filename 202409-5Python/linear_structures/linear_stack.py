@@ -81,6 +81,40 @@ def baseConverter(decNumber, base):
     return newString
 
 
+# 栈应用：中序表达式变前序表达式（波兰表达式）
+def infixToPrefix(infixexpr):
+    prec = {}
+    prec['*'] = 3
+    prec['/'] = 3
+    prec['+'] = 2
+    prec['-'] = 2
+    prec['('] = 1
+    opStack = Stack()
+    postfixList = []
+    tokenList = infixexpr.split()
+
+    for token in tokenList:
+        if token in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" or token in "0123456789":
+            postfixList.append(token)
+        elif token == '(':
+            opStack.push(token)
+        elif token == ')':
+            topToken = opStack.pop()
+            while topToken != '(':
+                postfixList.append(topToken)
+                topToken = opStack.pop()
+        else:
+            while (not opStack.isEmpty()) and \
+                (prec[opStack.peek()] >= prec[token]):
+                    postfixList.append(opStack.pop())
+            opStack.push(token)
+    
+    while not opStack.isEmpty():
+        postfixList.append(opStack.pop())
+    
+    return " ".join(postfixList)
+
+
 # 栈应用：中序表达式变后序表达式（逆波兰表达式）
 def infixToPostfix(infixexpr):
     prec = {}
@@ -175,3 +209,18 @@ if __name__ == "__main__":
 
     print(postfixEval('7 8 + 3 2 + /'))
     print(postfixEval(infixToPostfix("( 7 + 8 ) / ( 3 + 2 )")))
+
+# Discussion Questions 1
+    print(divideBy2(17))
+    print(divideBy2(45))
+    print(divideBy2(96))
+
+# Discussion Questions 3
+    print(infixToPrefix("( A + B ) * ( C + D ) * ( E + F )"))
+    print(infixToPrefix("A + ( ( B + C ) * ( D + E ) )"))
+    print(infixToPrefix("A * B * C * D + E + F"))
+
+# Discussion Questions 3
+    print(infixToPostfix("( A + B ) * ( C + D ) * ( E + F )"))
+    print(infixToPostfix("A + ( ( B + C ) * ( D + E ) )"))
+    print(infixToPostfix("A * B * C * D + E + F"))
