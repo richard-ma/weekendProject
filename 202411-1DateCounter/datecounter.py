@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import json
+import json, sys
 from datetime import datetime, timedelta, date
 from configparser import ConfigParser
 
@@ -23,9 +23,18 @@ def get_list(item_obj):
 
 
 if __name__ == "__main__":
+    if len(sys.argv) < 1:
+        print("清输入日期配置文件名称")
+        exit()
+    date_filename = sys.argv[1]
+    print(date_filename)
     schedule_filename = './schedule.ini'
-    schedule = ConfigParser()
+    date_fmt = '%Y-%m-%d'
 
+    date_config = ConfigParser()
+    date_config.read(date_filename)
+
+    schedule = ConfigParser()
     schedule.read(schedule_filename)
 
     ans = dict()
@@ -36,7 +45,7 @@ if __name__ == "__main__":
         section_schedule = get_list(schedule.get(section, "schedule"))
         schedule_table[section] = section_schedule
 
-    for d in date_range('2024-10-01', '2024-11-01'):
+    for d in date_range(date_config.get('DEFAULT', 'start'), date_config.get('DEFAULT', 'end')):
         key = d.weekday()
 
         for k, v in schedule_table.items():
@@ -44,9 +53,9 @@ if __name__ == "__main__":
                 continue # Sat Sun
 
             if v[key] in ans.keys():
-                ans[v[key]].append(k)
+                ans[v[key]].append((k, d.strftime(date_fmt)))
             else:
-                ans[v[key]] = [k]
+                ans[v[key]] = [(k, d.strftime(date_fmt))]
 
     print(schedule_table)
     print(ans)
