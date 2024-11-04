@@ -21,6 +21,39 @@ def date_range(start, end, periods=1):
 def get_list(item_obj):
     return json.loads(item_obj)
 
+def load_date_config(date_filename):
+    date_config = ConfigParser()
+    date_config.read(date_filename)
+    start = date_config.get('GENERAL', 'start')
+    end = date_config.get('GENERAL', 'end')
+
+    special_days = dict()
+    if date_config.has_section('SPEDAYS'):
+        for special_date in date_config.options('SPEDAYS'):
+            special_days[special_date] = date_config.getint('SPEDAYS', special_date)
+
+    return [start, end, special_days]
+
+def load_schedule_config(schedule_filename):
+    schedule = ConfigParser()
+    schedule.read(schedule_filename)
+
+    schedule_table = dict()
+
+    for section in schedule.sections():
+        section_name = schedule.get(section, "name")
+        section_schedule = get_list(schedule.get(section, "schedule"))
+        schedule_table[section] = section_schedule
+
+    return schedule_table
+
+def weekday(date, special_days, date_str_fmt='%Y-%m-%d'):
+    date_str = date.strftime(date_str_fmt)
+    if date_str in special_days.keys():
+        return special_days[date_str]
+    else:
+        return date.weekday()
+
 
 if __name__ == "__main__":
     if len(sys.argv) < 1:
@@ -31,22 +64,14 @@ if __name__ == "__main__":
     schedule_filename = './schedule.ini'
     date_fmt = '%Y-%m-%d'
 
-    date_config = ConfigParser()
-    date_config.read(date_filename)
-
-    schedule = ConfigParser()
-    schedule.read(schedule_filename)
+    start, end, special_days = load_date_config(date_filename)
+    print(start, end, special_days)
+    schedule_table = load_schedule_config(schedule_filename)
+    print(schedule_table)
 
     ans = dict()
-    schedule_table = dict()
-
-    for section in schedule.sections():
-        section_name = schedule.get(section, "name")
-        section_schedule = get_list(schedule.get(section, "schedule"))
-        schedule_table[section] = section_schedule
-
-    for d in date_range(date_config.get('DEFAULT', 'start'), date_config.get('DEFAULT', 'end')):
-        key = d.weekday()
+    for d in date_range(start, end):
+        key = weekday(d, special_days)
 
         for k, v in schedule_table.items():
             if key > 4:
