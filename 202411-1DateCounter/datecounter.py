@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 import json, sys
+import numpy as np
+import pandas as pd
 from datetime import datetime, timedelta, date
 from configparser import ConfigParser
 
@@ -70,17 +72,18 @@ if __name__ == "__main__":
     print(schedule_table)
 
     ans = dict()
+    idx = 0
     for d in date_range(start, end):
         key = weekday(d, special_days)
 
         for k, v in schedule_table.items():
             if key > 4:
                 continue # Sat Sun
-
-            if v[key] in ans.keys():
-                ans[v[key]].append((k, d.strftime(date_fmt)))
             else:
-                ans[v[key]] = [(k, d.strftime(date_fmt))]
-
-    print(schedule_table)
+                idx += 1
+                ans[idx] = list()
+                ans[idx].extend([d.strftime(date_fmt), k, v[key], 'a', 'b', 'c'])
+            
     print(ans)
+    df = pd.DataFrame(ans)
+    print(df)
