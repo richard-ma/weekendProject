@@ -82,8 +82,9 @@ if __name__ == "__main__":
             else:
                 idx += 1
                 ans[idx] = list()
-                ans[idx].extend([d.strftime(date_fmt), k, v[key], 'a', 'b', 'c'])
+                ans[idx].extend([d.strftime(date_fmt), k, v[key]])
             
     print(ans)
-    df = pd.DataFrame(ans)
-    print(df)
+    df = pd.DataFrame.from_dict(ans, orient='index', columns=('date', 'class', 'name'))
+    grouped = df.groupby(['class', 'name'])
+    print(grouped.count())
