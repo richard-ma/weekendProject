@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import time
+import os
 from configparser import ConfigParser
 from collections import Counter
 from watchdog.observers import Observer
@@ -41,6 +42,7 @@ class MyHandler(FileSystemEventHandler):
         tickets = Counter(tickets)
 
         ans = combine_result(names, tickets)
+        os.system('clear')
         for k, v in ans.items():
             print(k, v)
 
