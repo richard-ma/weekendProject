@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 
+import time
 from configparser import ConfigParser
 from collections import Counter
+from watchdog.observers import Observer
+from watchdog.events import DirModifiedEvent, FileModifiedEvent, FileSystemEventHandler
 
 
 def load_name_config(names_filename='./names.ini'):
@@ -23,19 +26,35 @@ def load_tickets(tickets_filename='./tickets.ini'):
 
     return ret
 
-def combine_result(names, ticktes):
+def combine_result(names, tickets):
     d = dict()
     for idx, name in names.items():
         d[name] = tickets[str(idx)]
     return d
 
 
+class MyHandler(FileSystemEventHandler):
+    def on_modified(self, event: DirModifiedEvent | FileModifiedEvent) -> None:
+        names = load_name_config()
+
+        tickets = load_tickets()
+        tickets = Counter(tickets)
+
+        ans = combine_result(names, tickets)
+        for k, v in ans.items():
+            print(k, v)
+
+        return super().on_modified(event)
+
 if __name__ == '__main__':
-    names = load_name_config()
+    event_handler = MyHandler()
+    observer = Observer()
+    observer.schedule(event_handler, path='.', recursive=False)
+    observer.start()
 
-    tickets = load_tickets()
-    tickets = Counter(tickets)
-
-    ans = combine_result(names, tickets)
-    for k, v in ans.items():
-        print(k, v)
+    try:
+        while True:
+            time.sleep(0.1)
+    except KeyboardInterrupt:
+        observer.stop()
+    observer.join()
