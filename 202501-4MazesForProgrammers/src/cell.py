@@ -28,9 +28,9 @@ class Cell:
 
     def neighbors(self):
         ret = list()
-        ret += self._north
-        ret += self._south
-        ret += self._east
-        ret += self._west
+        ret += [self._north] if self._north else []
+        ret += [self._south] if self._south else []
+        ret += [self._east] if self._east else []
+        ret += [self._west] if self._west else []
         
         return ret
