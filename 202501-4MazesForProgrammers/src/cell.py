@@ -3,10 +3,10 @@ class Cell:
         self._row = row
         self._column = column
 
-        self._north = list()
-        self._south = list()
-        self._east = list()
-        self._west = list()
+        self._north = None
+        self._south = None
+        self._east = None
+        self._west = None
 
         self._links = dict()
 
