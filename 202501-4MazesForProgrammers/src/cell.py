@@ -23,7 +23,7 @@ class Cell:
     def links(self):
         return list(self._links.keys())
 
-    def is_links(self, cell):
+    def is_linked(self, cell):
         return cell in self._links.keys()
 
     def neighbors(self):
