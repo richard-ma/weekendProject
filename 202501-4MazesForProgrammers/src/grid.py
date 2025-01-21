@@ -70,5 +70,30 @@ class Grid:
         
         return output
 
-    def to_png(self, filename):
-        pass
+    def to_png(self, cell_size=10, wall_width=2):
+        img_width = cell_size * self._columns
+        img_height = cell_size * self._rows
+
+        background = 'white'
+        wall = 'black'
+
+        img = Image.new('RGB', (img_width+1, img_height+1), color=background)
+        draw = ImageDraw.Draw(img)
+
+        for cell in self.each_cell():
+            x1 = cell._column * cell_size
+            y1 = cell._row * cell_size
+            x2 = (cell._column + 1) * cell_size
+            y2 = (cell._row + 1) * cell_size
+
+            if cell._north is None:
+                draw.line((x1, y1, x2, y1), fill=wall, width=wall_width)
+            if cell._west is None:
+                draw.line((x1, y1, x1, y2), fill=wall, width=wall_width)
+
+            if not cell.is_linked(cell._east):
+                draw.line((x2, y1, x2, y2), fill=wall, width=wall_width)
+            if not cell.is_linked(cell._south):
+                draw.line((x1, y2, x2, y2), fill=wall, width=wall_width)
+
+        img.save('line_image.png')
