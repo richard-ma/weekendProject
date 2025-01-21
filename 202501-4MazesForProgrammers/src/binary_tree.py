@@ -10,10 +10,10 @@ class BinaryTree:
     def on(self, grid):
         for cell in grid.each_cell():
             neighbors = list()
-            neighbors += cell._north if cell._north else []
-            neighbors += cell._east if cell._east else []
+            neighbors += [cell._north] if cell._north else []
+            neighbors += [cell._east] if cell._east else []
             
-            neighbor = random.choice(neighbors)
+            neighbor = random.choice(neighbors) if neighbors else None
 
             if neighbor:
                 cell.link(neighbor)
