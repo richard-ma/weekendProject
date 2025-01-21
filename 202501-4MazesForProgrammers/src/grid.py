@@ -48,6 +48,9 @@ class Grid:
                 if cell:
                     yield cell
 
+    def contents_of(self, cell):
+        return " "
+
     def __str__(self):
         output = "+" + "---+" * self._columns + "\n"
         
@@ -57,7 +60,7 @@ class Grid:
             
             for cell in row:
                 cell = cell if cell else Cell(-1, -1)
-                body = "   "
+                body = " %c " % (self.contents_of(cell))
                 east_boundary = " " if (cell.is_linked(cell._east)) else "|"
                 top = top + body + east_boundary
 
@@ -97,3 +100,20 @@ class Grid:
                 draw.line((x1, y2, x2, y2), fill=wall, width=wall_width)
 
         img.save(filename)
+
+
+class DistanceGrid(Grid):
+    def __init__(self, rows, columns):
+        super().__init__(rows, columns)
+        self._distances = None
+
+    # change int value to string charactor
+    def __i2c(self, i: int):
+        charset = "0123456789abcdefghijklmnopqrstuvwxyz"
+        return charset[i]
+        
+    def contents_of(self, cell):
+        if self._distances and self._distances[cell] is not None:
+            return self.__i2c(self._distances[cell])
+        else:
+            return super().contents_of(cell)

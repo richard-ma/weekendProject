@@ -1,3 +1,6 @@
+from src.distances import *
+
+
 class Cell:
     def __init__(self, row: int, column: int):
         self._row = row
@@ -34,3 +37,19 @@ class Cell:
         ret += [self._west] if self._west else []
         
         return ret
+
+    def distances(self):
+        distances = Distances(self)
+        frontier = [self]
+
+        while len(frontier) > 0:
+            new_frontier = []
+            for cell in frontier:
+                for linked in cell.links():
+                    if distances[linked] is not None:
+                        continue
+                    distances[linked] = distances[cell] + 1
+                    new_frontier.append(linked)
+            frontier = new_frontier
+
+        return distances
