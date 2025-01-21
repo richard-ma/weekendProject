@@ -29,3 +29,4 @@ class TestSidewinder(unittest.TestCase):
 
         self.assertGreater(link_count, 0)
         # print(g) # show grid
+        # g.to_png() # test draw to png
