@@ -44,7 +44,8 @@ class Grid:
     def each_cell(self):
         for row in self._grid:
             for cell in row:
-                yield cell
+                if cell:
+                    yield cell
 
 
 if __name__ == "__main__":
