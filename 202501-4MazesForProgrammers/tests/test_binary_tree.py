@@ -12,6 +12,13 @@ class TestBinaryTree(unittest.TestCase):
     
     def test_binary_tree_on(self):
         g = Grid(4, 4)
+
+        link_count = 0
+        for cell in g.each_cell():
+            if len(cell.links()) > 0:
+                link_count += len(cell.links())
+        self.assertEqual(link_count, 0)
+
         bt = BinaryTree()
         bt.on(g)
 
