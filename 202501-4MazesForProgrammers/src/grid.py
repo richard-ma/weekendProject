@@ -70,7 +70,7 @@ class Grid:
         
         return output
 
-    def to_png(self, cell_size=10, wall_width=2):
+    def to_png(self, filename, cell_size=10, wall_width=2):
         img_width = cell_size * self._columns
         img_height = cell_size * self._rows
 
@@ -96,4 +96,4 @@ class Grid:
             if not cell.is_linked(cell._south):
                 draw.line((x1, y2, x2, y2), fill=wall, width=wall_width)
 
-        img.save('line_image.png')
+        img.save(filename)
