@@ -28,3 +28,4 @@ class TestBinaryTree(unittest.TestCase):
                 link_count += len(cell.links())
 
         self.assertGreater(link_count, 0)
+        # print(g) # show grid
