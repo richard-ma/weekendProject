@@ -47,6 +47,28 @@ class Grid:
                 if cell:
                     yield cell
 
+    def __str__(self):
+        output = "+" + "---+" * self._columns + "\n"
+        
+        for row in self.each_row():
+            top = "|"
+            bottom = "+"
+            
+            for cell in row:
+                cell = cell if cell else Cell(-1, -1)
+                body = "   "
+                east_boundary = " " if (cell.is_linked(cell._east)) else "|"
+                top = top + body + east_boundary
+
+                south_boundary = "   " if (cell.is_linked(cell._south)) else "---"
+                corner = "+"
+                bottom = bottom + south_boundary + corner
+            
+            output = output + top + "\n"
+            output = output + bottom + "\n"
+        
+        return output
+
 
 if __name__ == "__main__":
     g = Grid(4, 4)
