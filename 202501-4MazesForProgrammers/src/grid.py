@@ -1,4 +1,5 @@
 from random import randint
+from PIL import Image, ImageDraw
 from src.cell import *
 
 class Grid:
@@ -69,11 +70,5 @@ class Grid:
         
         return output
 
-
-if __name__ == "__main__":
-    g = Grid(4, 4)
-    print(g[0][0]._north)
-    print(g[0][0]._west)
-    print(g[0][0]._south._row, g[0][0]._south._column)
-    print(g[0][0]._east._row, g[0][0]._east._column)
-    print(g.random_cell())
+    def to_png(self, filename):
+        pass
