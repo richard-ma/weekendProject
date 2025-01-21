@@ -49,3 +49,6 @@ class TestGrid(unittest.TestCase):
         self.assertEqual(len(self.g[0][0].neighbors()), 2)
         self.assertEqual(len(self.g[0][1].neighbors()), 3)
         
+    def test_str(self):
+        g = Grid(2, 2)
+        self.assertEqual(str(g), "+---+---+\n|   |   |\n+---+---+\n|   |   |\n+---+---+\n")
