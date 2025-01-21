@@ -83,23 +83,32 @@ class Grid:
         img = Image.new('RGB', (img_width+1, img_height+1), color=background)
         draw = ImageDraw.Draw(img)
 
-        for cell in self.each_cell():
-            x1 = cell._column * cell_size
-            y1 = cell._row * cell_size
-            x2 = (cell._column + 1) * cell_size
-            y2 = (cell._row + 1) * cell_size
+        for mode in ['backgrounds', 'walls']:
+            for cell in self.each_cell():
+                x1 = cell._column * cell_size
+                y1 = cell._row * cell_size
+                x2 = (cell._column + 1) * cell_size
+                y2 = (cell._row + 1) * cell_size
 
-            if cell._north is None:
-                draw.line((x1, y1, x2, y1), fill=wall, width=wall_width)
-            if cell._west is None:
-                draw.line((x1, y1, x1, y2), fill=wall, width=wall_width)
+                if mode == 'backgrounds':
+                    color = self.background_color_for(cell)
+                    if color is not None:
+                        draw.rectangle((x1, y1, x2, y2), fill=color)
+                else:
+                    if cell._north is None:
+                        draw.line((x1, y1, x2, y1), fill=wall, width=wall_width)
+                    if cell._west is None:
+                        draw.line((x1, y1, x1, y2), fill=wall, width=wall_width)
 
-            if not cell.is_linked(cell._east):
-                draw.line((x2, y1, x2, y2), fill=wall, width=wall_width)
-            if not cell.is_linked(cell._south):
-                draw.line((x1, y2, x2, y2), fill=wall, width=wall_width)
+                    if not cell.is_linked(cell._east):
+                        draw.line((x2, y1, x2, y2), fill=wall, width=wall_width)
+                    if not cell.is_linked(cell._south):
+                        draw.line((x1, y2, x2, y2), fill=wall, width=wall_width)
 
         img.save(filename)
+
+    def background_color_for(self, cell):
+        return None
 
 
 class DistanceGrid(Grid):
@@ -117,3 +126,23 @@ class DistanceGrid(Grid):
             return self.__i2c(self._distances[cell])
         else:
             return super().contents_of(cell)
+
+
+class ColoredGrid(Grid):
+    def __init__(self, rows, columns):
+        super().__init__(rows, columns)
+        self._distances = None
+        self._maximum = None
+
+    def set_distances(self, distances):
+        self._distances = distances
+        farthest, self._maximum = distances.max()
+
+    def background_color_for(self, cell):
+        if not cell in self._distances.cells():
+            return None
+        distance = self._distances[cell]
+        intensity = float(self._maximum - distance) / self._maximum
+        dark = round(255 * intensity)
+        bright = 128 + round(127 * intensity)
+        return (dark, bright, dark)
