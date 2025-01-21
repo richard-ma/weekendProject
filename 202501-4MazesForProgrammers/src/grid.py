@@ -1,5 +1,5 @@
 from random import randint
-from cell import *
+from src.cell import *
 
 class Grid:
     def __init__(self, rows: int, columns: int):
