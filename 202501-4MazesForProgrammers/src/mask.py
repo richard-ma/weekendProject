@@ -31,3 +31,24 @@ class Mask:
             
             if self._bits[row][col]:
                 return (row, col)
+
+    @classmethod
+    def from_text(cls, filename):
+        lines = []
+        with open(filename, 'r+') as f:
+            lines = [s.strip() for s in f.readlines()]
+        while len(lines[-1]) < 1:
+            lines.pop()
+
+        rows = len(lines)
+        columns = len(lines[0])
+        mask = cls(rows, columns)
+        
+        for row in range(mask._rows):
+            for col in range(mask._columns):
+                if lines[row][col] == 'x':
+                    mask[row, col] = False
+                else:
+                    mask[row, col] = True
+        
+        return mask
