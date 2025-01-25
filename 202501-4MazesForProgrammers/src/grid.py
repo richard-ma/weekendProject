@@ -22,11 +22,12 @@ class Grid:
     def configure_cells(self):
         for line in self._grid:
             for cell in line:
-                row, col = cell._row, cell._column
-                cell._north = self[row-1][col] if row-1 >= 0 else None
-                cell._south = self[row+1][col] if row+1 < self._rows else None
-                cell._east = self[row][col+1] if col+1 < self._columns else None
-                cell._west = self[row][col-1] if col-1 >= 0 else None
+                if cell is not None:
+                    row, col = cell._row, cell._column
+                    cell._north = self[row-1][col] if row-1 >= 0 else None
+                    cell._south = self[row+1][col] if row+1 < self._rows else None
+                    cell._east = self[row][col+1] if col+1 < self._columns else None
+                    cell._west = self[row][col-1] if col-1 >= 0 else None
 
     def __getitem__(self, idx):
         return self._grid[idx]
@@ -153,3 +154,28 @@ class ColoredGrid(Grid):
         dark = round(255 * intensity)
         bright = 128 + round(127 * intensity)
         return (dark, bright, dark)
+
+
+class MaskedGrid(Grid):
+    def __init__(self, mask):
+        self._mask = mask
+        super().__init__(self._mask._rows, self._mask._columns)
+
+    def prepare_grid(self):
+        ret = list()
+        for r in range(self._rows):
+            line = list()
+            for c in range(self._columns):
+                if self._mask[r, c]:
+                    line.append(Cell(r, c))
+                else:
+                    line.append(None)
+            ret.append(line)
+        return ret
+
+    def random_cell(self):
+        row, col = self._mask.random_location()
+        return self[row][col]
+
+    def size(self):
+        return self._mask.count()
