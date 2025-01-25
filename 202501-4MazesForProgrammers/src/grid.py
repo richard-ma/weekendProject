@@ -110,6 +110,13 @@ class Grid:
     def background_color_for(self, cell):
         return None
 
+    def deadends(self): # 死角计数
+        l = []
+        for cell in self.each_cell():
+            if len(cell.links()) == 1:
+                l.append(cell)
+        return l
+
 
 class DistanceGrid(Grid):
     def __init__(self, rows, columns):
