@@ -127,7 +127,9 @@ class Grid:
         return l
 
     def braid(self, p=1.0):
-        for cell in random.shuffle(self.deadends()):
+        deadends = self.deadends()
+        random.shuffle(deadends)
+        for cell in deadends:
             if len(cell.links()) != 1 or random.random() > p:
                 continue
             
