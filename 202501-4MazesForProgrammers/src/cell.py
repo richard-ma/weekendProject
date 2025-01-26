@@ -75,3 +75,30 @@ class PolarCell(Cell):
         l += self._outward
         
         return l
+
+        
+class HexCell(Cell):
+    def __init__(self, row, column):
+        super().__init__(row, column)
+        self._northeast = None
+        self._northwest = None
+        self._southeast = None
+        self._southwest = None
+        
+    def neighbors(self):
+        l = []
+
+        if self._north is not None:
+            l.append(self._north)
+        if self._northeast is not None:
+            l.append(self._northeast)
+        if self._northwest is not None:
+            l.append(self._northwest)
+        if self._south is not None:
+            l.append(self._south)
+        if self._southeast is not None:
+            l.append(self._southeast)
+        if self._southwest is not None:
+            l.append(self._southwest)
+
+        return l

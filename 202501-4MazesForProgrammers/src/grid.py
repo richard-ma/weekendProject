@@ -33,8 +33,8 @@ class Grid:
     def __getitem__(self, idx):
         if type(idx) in (tuple, list):
             row, col = idx
-            if 0 <= row < self._rows:
-                return self._grid[row][col%len(self._grid[row])]
+            if 0 <= row < self._rows and 0 <= col < self._columns:
+                return self._grid[row][col]
             else:
                 return None
         else:
@@ -276,4 +276,91 @@ class PolarGrid(Grid):
 
             draw.ellipse((0, 0, img_size, img_size), outline=wall, width=wall_width)
 
+        img.save(filename)
+
+        
+class HexGrid(Grid):
+    def prepare_grid(self):
+        ret = list()
+        for r in range(self._rows):
+            line = list()
+            for c in range(self._columns):
+                line.append(HexCell(r, c))
+            ret.append(line)
+        return ret
+
+    def configure_cells(self):
+        for cell in self.each_cell():
+            row, col = cell._row, cell._column
+
+            if col % 2 == 0:
+                north_diagonal = row - 1
+                south_diagonal = row
+            else:
+                north_diagonal = row
+                south_diagonal = row + 1
+            
+            cell._northwest = self[north_diagonal, col-1]
+            cell._north = self[row-1, col]
+            cell._northeast = self[north_diagonal, col+1]
+            cell._southwest = self[south_diagonal, col-1]
+            cell._south= self[row+1, col]
+            cell._southeast = self[south_diagonal, col+1]
+
+    def to_png(self, filename, cell_size=10, wall_width=2):
+        a_size = cell_size / 2.0
+        b_size = cell_size * math.sqrt(3) / 2.0
+        width = cell_size * 2
+        height = b_size * 2
+
+        img_width = int(3 * a_size * self._columns + a_size + 0.5)
+        img_height = int(height * self._rows + b_size + 0.5)
+
+        background = 'white'
+        wall = 'black'
+
+        img = Image.new('RGB', (img_width+1, img_height+1), color=background)
+        draw = ImageDraw.Draw(img)
+        
+        for mode in ['backgrounds', 'walls']:
+            for cell in self.each_cell():
+                cx = cell_size + 3 * cell._column * a_size
+                cy = b_size + cell._row * height
+                cy += b_size if cell._column % 2 == 1 else 0
+
+                # f/n: far near
+                # n/s/w/e: north south west east
+                x_fw = int(cx - cell_size)
+                x_nw = int(cx - a_size)
+                x_ne = int(cx + a_size)
+                x_fe = int(cx + cell_size)
+
+                # m: middle
+                y_n = int(cy - b_size)
+                y_m = int(cy)
+                y_s = int(cy + b_size)
+
+                if mode == 'backgrounds':
+                    color = self.background_color_for(cell)
+                    if color is not None:
+                        points = [
+                            [x_fw, y_m], [x_nw, y_n], [x_ne, y_n],
+                            [x_fe, y_m], [x_ne, y_s], [x_nw, y_s]
+                        ]
+                        draw.polygon(points, fill=color)
+                else:
+                    if cell._southwest is None:
+                        draw.line((x_fw, y_m, x_nw, y_s), fill=wall, width=wall_width)
+                    if cell._northwest is None:
+                        draw.line((x_fw, y_m, x_nw, y_n), fill=wall, width=wall_width)
+                    if cell._north is None:
+                        draw.line((x_nw, y_n, x_ne, y_n), fill=wall, width=wall_width)
+
+                    if not cell.is_linked(cell._northeast):
+                        draw.line((x_ne, y_n, x_fe, y_m), fill=wall, width=wall_width)
+                    if not cell.is_linked(cell._southeast):
+                        draw.line((x_fe, y_m, x_ne, y_s), fill=wall, width=wall_width)
+                    if not cell.is_linked(cell._south):
+                        draw.line((x_ne, y_s, x_nw, y_s), fill=wall, width=wall_width)
+                    
         img.save(filename)
