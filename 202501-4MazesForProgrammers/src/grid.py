@@ -1,3 +1,4 @@
+import math
 from random import randint
 from PIL import Image, ImageDraw
 from src.cell import *
@@ -179,3 +180,40 @@ class MaskedGrid(Grid):
 
     def size(self):
         return self._mask.count()
+
+
+class PolarGrid(Grid):
+    def to_png(self, filename, cell_size=10, wall_width=2):
+        img_size = 2 * self._rows * cell_size
+        
+        background = 'white'
+        wall = 'black'
+
+        img = Image.new('RGB', (img_size+1, img_size+1), color=background)
+        draw = ImageDraw.Draw(img)
+        center = img_size // 2
+        
+        for cell in self.each_cell():
+            theta = 2 * math.pi / len(self._grid[cell._row])
+            inner_radius = cell._row * cell_size
+            outer_radius = (cell._row + 1) * cell_size
+            theta_ccw = cell._column * theta
+            theta_cw = (cell._column + 1) * theta
+
+            ax = center + int(inner_radius * math.cos(theta_ccw))
+            ay = center + int(inner_radius * math.sin(theta_ccw))
+            bx = center + int(outer_radius * math.cos(theta_ccw))
+            by = center + int(outer_radius * math.sin(theta_ccw))
+            cx = center + int(inner_radius * math.cos(theta_cw))
+            cy = center + int(inner_radius * math.sin(theta_cw))
+            dx = center + int(outer_radius * math.cos(theta_cw))
+            dy = center + int(outer_radius * math.sin(theta_cw))
+
+            if not cell.is_linked(cell._north):
+                draw.line((ax, ay, cx, cy), fill=wall, width=wall_width)
+            if not cell.is_linked(cell._east):
+                draw.line((cx, cy, dx, dy), fill=wall, width=wall_width)
+
+            draw.ellipse((0, 0, img_size, img_size), outline=wall, width=wall_width)
+
+        img.save(filename)
