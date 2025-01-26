@@ -1,5 +1,5 @@
 import math
-from random import randint, randrange
+import random
 from PIL import Image, ImageDraw
 from src.cell import *
 
@@ -41,7 +41,7 @@ class Grid:
             return self._grid[idx]
 
     def random_cell(self):
-        r_row, r_col = randint(0, self._rows-1), randint(0, self._columns-1)
+        r_row, r_col = random.randint(0, self._rows-1), random.randint(0, self._columns-1)
         return self[r_row][r_col]
 
     def size(self):
@@ -236,8 +236,8 @@ class PolarGrid(Grid):
                 cell._inward = parent
 
     def random_cell(self):
-        row = randrange(0, self._rows)
-        col = randrange(0, len(self._grid[row]))
+        row = random.randrange(0, self._rows)
+        col = random.randrange(0, len(self._grid[row]))
         return self._grid[row][col]
     
     def to_png(self, filename, cell_size=10, wall_width=2):
