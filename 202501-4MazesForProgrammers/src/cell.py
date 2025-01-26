@@ -102,3 +102,26 @@ class HexCell(Cell):
             l.append(self._southwest)
 
         return l
+
+
+class TriangleCell(Cell):
+    def __init__(self, row, column):
+        super().__init__(row, column)
+        
+    def upright(self):
+        return (self._row + self._column) % 2 == 0
+
+    def neighbors(self):
+        l = []
+        
+        if self._west is not None:
+            l.append(self._west)
+        if self._east is not None:
+            l.append(self._east)
+        
+        if (not self.upright()) and (self._north is not None):
+            l.append(self._north)
+        if (self.upright()) and (self._south is not None):
+            l.append(self._south)
+
+        return l

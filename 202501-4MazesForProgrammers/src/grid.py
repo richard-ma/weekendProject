@@ -364,3 +364,80 @@ class HexGrid(Grid):
                         draw.line((x_ne, y_s, x_nw, y_s), fill=wall, width=wall_width)
                     
         img.save(filename)
+
+
+class TriangleGrid(Grid):
+    def __init__(self, rows, columns):
+        super().__init__(rows, columns)
+        
+    def prepare_grid(self):
+        ret = list()
+        for r in range(self._rows):
+            line = list()
+            for c in range(self._columns):
+                line.append(TriangleCell(r, c))
+            ret.append(line)
+        return ret
+
+    def configure_cells(self):
+        for cell in self.each_cell():
+            row, col = cell._row, cell._column
+            
+            cell._west = self[row, col - 1]
+            cell._east = self[row, col + 1]
+
+            if cell.upright():
+                cell._south = self[row + 1, col]
+            else:
+                cell._north = self[row - 1, col]
+
+    def to_png(self, filename, cell_size=10, wall_width=2):
+        half_width = cell_size / 2.0
+        height = cell_size * math.sqrt(3) / 2.0
+        half_height = height / 2.0
+        
+        img_width = int(cell_size * (self._columns + 1) / 2.0)
+        img_height = int(height * self._rows)
+
+        background = 'white'
+        wall = 'black'
+
+        img = Image.new('RGB', (img_width+1, img_height+1), color=background)
+        draw = ImageDraw.Draw(img)
+        
+        for mode in ['backgrounds', 'walls']:
+            for cell in self.each_cell():
+                cx = half_width + cell._column * half_width
+                cy = half_height + cell._row * height
+
+                west_x = int(cx - half_width)
+                mid_x = int(cx)
+                east_x = int(cx + half_width)
+
+                if cell.upright():
+                    apex_y = int(cy - half_height)
+                    base_y = int(cy + half_height)
+                else:
+                    apex_y = int(cy + half_height)
+                    base_y = int(cy - half_height)
+
+
+                if mode == 'backgrounds':
+                    color = self.background_color_for(cell)
+                    if color is not None:
+                        points = [
+                            [west_x, base_y], [mid_x, apex_y], [east_x, base_y]
+                        ]
+                        draw.polygon(points, fill=color)
+                else:
+                    if cell._west is None:
+                        draw.line((west_x, base_y, mid_x, apex_y), fill=wall, width=wall_width)
+                    if not cell.is_linked(cell._east):
+                        draw.line((east_x, base_y, mid_x, apex_y), fill=wall, width=wall_width)
+
+                    no_south = cell.upright() and cell._south is None
+                    not_linked = (not cell.upright()) and (not cell.is_linked(cell._north))
+                    if no_south or not_linked:
+                        draw.line((east_x, base_y, west_x, base_y), fill=wall, width=wall_width)
+                    
+        img.save(filename)
