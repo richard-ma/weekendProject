@@ -53,3 +53,25 @@ class Cell:
             frontier = new_frontier
 
         return distances
+
+
+class PolarCell(Cell):
+    def __init__(self, row, column):
+        super().__init__(row, column)
+        self._cw = None
+        self._ccw = None
+        self._inward = None
+        self._outward = []
+
+    def neighbors(self):
+        l = []
+
+        if self._cw is not None:
+            l.append(self._cw)
+        if self._ccw is not None:
+            l.append(self._ccw)
+        if self._inward is not None:
+            l.append(self._inward)
+        l += self._outward
+        
+        return l

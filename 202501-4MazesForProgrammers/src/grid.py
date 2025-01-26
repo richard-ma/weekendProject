@@ -1,5 +1,5 @@
 import math
-from random import randint
+from random import randint, randrange
 from PIL import Image, ImageDraw
 from src.cell import *
 
@@ -31,7 +31,14 @@ class Grid:
                     cell._west = self[row][col-1] if col-1 >= 0 else None
 
     def __getitem__(self, idx):
-        return self._grid[idx]
+        if type(idx) in (tuple, list):
+            row, col = idx
+            if 0 <= row < self._rows:
+                return self._grid[row][col%len(self._grid[row])]
+            else:
+                return None
+        else:
+            return self._grid[idx]
 
     def random_cell(self):
         r_row, r_col = randint(0, self._rows-1), randint(0, self._columns-1)
@@ -183,6 +190,56 @@ class MaskedGrid(Grid):
 
 
 class PolarGrid(Grid):
+    def __init__(self, rows):
+        super().__init__(rows, 1)
+
+    def __getitem__(self, idx):
+        if type(idx) in (tuple, list):
+            row, col = idx
+            if 0 <= row < self._rows:
+                return self._grid[row][col%len(self._grid[row])]
+            else:
+                return None
+        else:
+            return self._grid[idx]
+    
+    def prepare_grid(self):
+        rows = []
+        
+        row_height = 1.0 / self._rows
+        rows.append([PolarCell(0, 0)]) # row[0]
+
+        for row in range(1, self._rows):
+            radius = float(row) / self._rows
+            circumference = 2 * math.pi * radius
+            
+            previous_count = len(rows[row-1])
+            estimated_cell_width = circumference / previous_count
+            ratio = round(estimated_cell_width / row_height)
+
+            cells = previous_count * ratio
+            rows.append([PolarCell(row, col) for col in range(cells)])
+        
+        return rows
+
+    def configure_cells(self):
+        for cell in self.each_cell():
+            row, col = cell._row, cell._column
+            
+            if row > 0:
+                cell._cw = self[row, col+1]
+                cell._ccw = self[row, col-1]
+
+                ratio = len(self._grid[row]) / len(self._grid[row-1])
+                parent = self._grid[row-1][int(col/ratio)]
+                parent._outward.append(cell)
+                cell._inward = parent
+
+    def random_cell(self):
+        row = randrange(0, self._rows)
+        col = randrange(0, len(self._grid[row]))
+        return self._grid[row][col]
+    
     def to_png(self, filename, cell_size=10, wall_width=2):
         img_size = 2 * self._rows * cell_size
         
@@ -194,6 +251,9 @@ class PolarGrid(Grid):
         center = img_size // 2
         
         for cell in self.each_cell():
+            if cell._row == 0:
+                continue
+
             theta = 2 * math.pi / len(self._grid[cell._row])
             inner_radius = cell._row * cell_size
             outer_radius = (cell._row + 1) * cell_size
@@ -209,9 +269,9 @@ class PolarGrid(Grid):
             dx = center + int(outer_radius * math.cos(theta_cw))
             dy = center + int(outer_radius * math.sin(theta_cw))
 
-            if not cell.is_linked(cell._north):
+            if not cell.is_linked(cell._inward):
                 draw.line((ax, ay, cx, cy), fill=wall, width=wall_width)
-            if not cell.is_linked(cell._east):
+            if not cell.is_linked(cell._cw):
                 draw.line((cx, cy, dx, dy), fill=wall, width=wall_width)
 
             draw.ellipse((0, 0, img_size, img_size), outline=wall, width=wall_width)

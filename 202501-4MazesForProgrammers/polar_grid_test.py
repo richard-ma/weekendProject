@@ -3,7 +3,7 @@ from src.recursive_backtracker import *
 
 
 if __name__ == "__main__":
-    grid = PolarGrid(8, 8)
+    grid = PolarGrid(8)
     RecursiveBacktracker().on(grid)
 
     filename = "polar.png"
