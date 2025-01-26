@@ -1,4 +1,5 @@
 import random
+from PIL import Image, ImageColor
 
 
 class Mask:
@@ -47,6 +48,20 @@ class Mask:
         for row in range(mask._rows):
             for col in range(mask._columns):
                 if lines[row][col] == 'x':
+                    mask[row, col] = False
+                else:
+                    mask[row, col] = True
+        
+        return mask
+
+    @classmethod
+    def from_png(cls, filename):
+        image = Image.open(filename)
+        mask = cls(image.height, image.width)
+        
+        for row in range(mask._rows):
+            for col in range(mask._columns):
+                if image.getpixel((col, row)) == (0, 0, 0):
                     mask[row, col] = False
                 else:
                     mask[row, col] = True

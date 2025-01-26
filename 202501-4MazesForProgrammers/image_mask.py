@@ -4,9 +4,10 @@ from src.recursive_backtracker import *
 
 
 if __name__ == "__main__":
-    mask = Mask.from_text("mask.txt")
+    filename = "maze_test.png"
+    mask = Mask.from_png(filename)
     grid = MaskedGrid(mask)
     RecursiveBacktracker().on(grid)
 
-    filename = "text_mask.png"
+    filename = "image_mask.png"
     grid.to_png(filename)
