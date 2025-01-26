@@ -126,6 +126,18 @@ class Grid:
                 l.append(cell)
         return l
 
+    def braid(self, p=1.0):
+        for cell in random.shuffle(self.deadends()):
+            if len(cell.links()) != 1 or random.random() > p:
+                continue
+            
+            neighbors = [n for n in cell.neighbors() if not cell.is_linked(n)]
+            best = [n for n in neighbors if len(n.links()) == 1]
+            best = neighbors if len(best) == 0 else best
+            
+            neighbor = random.choice(best)
+            cell.link(neighbor)
+
 
 class DistanceGrid(Grid):
     def __init__(self, rows, columns):
