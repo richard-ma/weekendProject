@@ -82,9 +82,10 @@ class Grid:
         
         return output
 
-    def to_png(self, filename, cell_size=10, wall_width=2):
+    def to_png(self, filename, cell_size=10, inset=0, wall_width=2):
         img_width = cell_size * self._columns
         img_height = cell_size * self._rows
+        inset = int(cell_size * inset)
 
         background = 'white'
         wall = 'black'
@@ -94,27 +95,78 @@ class Grid:
 
         for mode in ['backgrounds', 'walls']:
             for cell in self.each_cell():
-                x1 = cell._column * cell_size
-                y1 = cell._row * cell_size
-                x2 = (cell._column + 1) * cell_size
-                y2 = (cell._row + 1) * cell_size
+                x = cell._column * cell_size
+                y = cell._row * cell_size
 
-                if mode == 'backgrounds':
-                    color = self.background_color_for(cell)
-                    if color is not None:
-                        draw.rectangle((x1, y1, x2, y2), fill=color)
+                if inset > 0:
+                    self.to_png_with_inset(draw, cell, mode, cell_size, wall, x, y, inset, wall_width)
                 else:
-                    if cell._north is None:
-                        draw.line((x1, y1, x2, y1), fill=wall, width=wall_width)
-                    if cell._west is None:
-                        draw.line((x1, y1, x1, y2), fill=wall, width=wall_width)
-
-                    if not cell.is_linked(cell._east):
-                        draw.line((x2, y1, x2, y2), fill=wall, width=wall_width)
-                    if not cell.is_linked(cell._south):
-                        draw.line((x1, y2, x2, y2), fill=wall, width=wall_width)
+                    self.to_png_without_inset(draw, cell, mode, cell_size, wall, x, y, wall_width)
 
         img.save(filename)
+
+    def to_png_without_inset(self, draw, cell, mode, cell_size, wall, x, y, wall_width):
+        x1, y1 = x, y
+        x2 = x1 + cell_size
+        y2 = y1 + cell_size
+
+        if mode == 'backgrounds':
+            color = self.background_color_for(cell)
+            if color is not None:
+                draw.rectangle((x1, y1, x2, y2), fill=color)
+        else:
+            if cell._north is None:
+                draw.line((x1, y1, x2, y1), fill=wall, width=wall_width)
+            if cell._west is None:
+                draw.line((x1, y1, x1, y2), fill=wall, width=wall_width)
+
+            if not cell.is_linked(cell._east):
+                draw.line((x2, y1, x2, y2), fill=wall, width=wall_width)
+            if not cell.is_linked(cell._south):
+                draw.line((x1, y2, x2, y2), fill=wall, width=wall_width)
+
+    def cell_coordinates_with_inset(self, x, y, cell_size, inset):
+        x1, x4 = x, x + cell_size
+        x2 = x1 + inset
+        x3 = x4 - inset
+
+        y1, y4, = y, y + cell_size
+        y2 = y1 + inset
+        y3 = y4 - inset
+
+        return [x1, x2, x3, x4, y1, y2, y3, y4]
+
+    def to_png_with_inset(self, draw, cell, mode, cell_size, wall, x, y, inset, wall_width):
+        x1, x2, x3, x4, y1, y2, y3, y4 = self.cell_coordinates_with_inset(x, y, cell_size, inset)
+
+        if mode == 'backgrounds':
+            color = self.background_color_for(cell)
+            if color is not None:
+                draw.rectangle((x2, y2, x3, y3), fill=color)
+        else:
+            if cell.is_linked(cell._north):
+                draw.line((x2, y1, x2, y2), fill=wall, width=wall_width)
+                draw.line((x3, y1, x3, y2), fill=wall, width=wall_width)
+            else:
+                draw.line((x2, y2, x3, y2), fill=wall, width=wall_width)
+
+            if cell.is_linked(cell._south):
+                draw.line((x2, y3, x2, y4), fill=wall, width=wall_width)
+                draw.line((x3, y3, x3, y4), fill=wall, width=wall_width)
+            else:
+                draw.line((x2, y3, x3, y3), fill=wall, width=wall_width)
+
+            if cell.is_linked(cell._west):
+                draw.line((x1, y2, x2, y2), fill=wall, width=wall_width)
+                draw.line((x1, y3, x2, y3), fill=wall, width=wall_width)
+            else:
+                draw.line((x2, y2, x2, y3), fill=wall, width=wall_width)
+
+            if cell.is_linked(cell._east):
+                draw.line((x3, y2, x4, y2), fill=wall, width=wall_width)
+                draw.line((x3, y3, x4, y3), fill=wall, width=wall_width)
+            else:
+                draw.line((x3, y2, x3, y3), fill=wall, width=wall_width)
 
     def background_color_for(self, cell):
         return None
