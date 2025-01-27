@@ -148,7 +148,7 @@ class DistanceGrid(Grid):
 
     # change int value to string charactor
     def __i2c(self, i: int):
-        charset = "0123456789abcdefghijklmnopqrstuvwxyz"
+        charset = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         return charset[i]
         
     def contents_of(self, cell):
@@ -455,3 +455,35 @@ class TriangleGrid(Grid):
                         draw.line((east_x, base_y, west_x, base_y), fill=wall, width=wall_width)
                     
         img.save(filename)
+
+        
+class WeightedGrid(Grid):
+    def __init__(self, rows, columns):
+        super().__init__(rows, columns)
+        self._distances = None
+        self._maximum = None
+
+    def set_distances(self, distances):
+        self._distances = distances
+        farthest, self._maximum = distances.max()
+
+    def prepare_grid(self):
+        ret = list()
+        for r in range(self._rows):
+            line = list()
+            for c in range(self._columns):
+                line.append(WeightedCell(r, c))
+            ret.append(line)
+        return ret
+
+    def background_color_for(self, cell):
+        if cell._weight > 1:
+            return (255, 0, 0)
+        elif self._distances is not None:
+            if cell not in self._distances.cells():
+                return None
+            distance = self._distances[cell]
+            intensity = 64 + 191 * (self._maximum - distance) // self._maximum
+            return (intensity, intensity, 0)
+        else:
+            return None

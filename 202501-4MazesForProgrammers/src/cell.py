@@ -125,3 +125,25 @@ class TriangleCell(Cell):
             l.append(self._south)
 
         return l
+
+
+class WeightedCell(Cell):
+    def __init__(self, row, column):
+        super().__init__(row, column)
+        self._weight = 1
+
+    def distances(self):
+        weights = Distances(self)
+        pending = [self]
+
+        while len(pending) > 0:
+            pending.sort(key=lambda x: x._weight) # ASCENDING ORDER
+            cell = pending.pop(0)
+
+            for neighbor in cell.links():
+                total_weight = weights[cell] + neighbor._weight
+                if (weights[neighbor] is None) or (total_weight < weights[neighbor]):
+                    pending.append(neighbor)
+                    weights[neighbor] = total_weight
+
+        return weights
