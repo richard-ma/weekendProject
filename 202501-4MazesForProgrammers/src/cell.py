@@ -147,3 +147,85 @@ class WeightedCell(Cell):
                     weights[neighbor] = total_weight
 
         return weights
+
+
+class OverCell(Cell):
+    def __init__(self, row, column, grid):
+        super().__init__(row, column)
+        self._grid = grid
+
+    def neighbors(self):
+        l = super().neighbors()
+        if self.can_tunnel_north():
+            l.append(self._north._north)
+        if self.can_tunnel_south():
+            l.append(self._south._south)
+        if self.can_tunnel_east():
+            l.append(self._east._east)
+        if self.can_tunnel_west():
+            l.append(self._west._west)
+        
+        return l
+
+    def can_tunnel_north(self):
+        return (self._north is not None) and (self._north._north is not None) and self._north.horizontal_passage()
+
+    def can_tunnel_south(self):
+        return (self._south is not None) and (self._south._south is not None) and self._south.horizontal_passage()
+
+    def can_tunnel_east(self):
+        return (self._east is not None) and (self._east._east is not None) and self._east.vertical_passage()
+
+    def can_tunnel_west(self):
+        return (self._west is not None) and (self._west._west is not None) and self._west.vertical_passage()
+
+    def horizontal_passage(self):
+        return self.is_linked(self._east) and self.is_linked(self._west) and \
+            (not self.is_linked(self._north)) and (not self.is_linked(self._south))
+
+    def vertical_passage(self):
+        return self.is_linked(self._north) and self.is_linked(self._south) and \
+            (not self.is_linked(self._east)) and (not self.is_linked(self._west))
+
+    def link(self, cell, bidi=True):
+        if self._north is not None and self._north == cell._south:
+            neighbor = self._north
+        elif self._south is not None and self._south == cell._north:
+            neighbor = self._south
+        elif self._east is not None and self._east == cell._west:
+            neighbor = self._east
+        elif self._west is not None and self._west == cell._east:
+            neighbor = self._west
+        else:
+            neighbor = None
+
+        if neighbor is not None:
+            self._grid.tunnel_under(neighbor)
+        else:
+            super().link(cell, bidi)
+
+
+class UnderCell(Cell):
+    def __init__(self, over_cell):
+        super().__init__(over_cell._row, over_cell._column)
+
+        if over_cell.horizontal_passage():
+            self._north = over_cell._north
+            over_cell._north._south = self
+            self._south = over_cell._south
+            over_cell._south._north = self
+            self.link(self._north)
+            self.link(self._south)
+        else:
+            self._east = over_cell._east
+            over_cell._east._west = self
+            self._west = over_cell._west
+            over_cell._west._east = self
+            self.link(self._east)
+            self.link(self._west)
+
+    def horizontal_passage(self):
+        return self._east is not None or self._west is not None
+    
+    def vertical_passage(self):
+        return self._north is not None or self._south is not None

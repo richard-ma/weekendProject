@@ -539,3 +539,49 @@ class WeightedGrid(Grid):
             return (intensity, intensity, 0)
         else:
             return None
+
+            
+class WeaveGrid(Grid):
+    def __init__(self, rows, columns):
+        self._under_cells = []
+        super().__init__(rows, columns)
+
+    def prepare_grid(self):
+        ret = list()
+        for r in range(self._rows):
+            line = list()
+            for c in range(self._columns):
+                line.append(OverCell(r, c, self))
+            ret.append(line)
+        return ret
+
+    def tunnel_under(self, over_cell):
+        under_cell = UnderCell(over_cell)
+        self._under_cells.append(under_cell)
+
+    def each_cell(self):
+        for cell in super().each_cell():
+            yield cell
+
+        for cell in self._under_cells:
+            yield cell
+
+    def to_png(self, filename, cell_size=10, inset=0.1, wall_width=1):
+        return super().to_png(filename, cell_size, inset, wall_width)
+
+    def to_png_with_inset(self, draw, cell, mode, cell_size, wall, x, y, inset, wall_width):
+        if isinstance(cell, OverCell):
+            return super().to_png_with_inset(draw, cell, mode, cell_size, wall, x, y, inset, wall_width)
+        else:
+            x1, x2, x3, x4, y1, y2, y3, y4 = self.cell_coordinates_with_inset(x, y, cell_size, inset)
+        
+        if cell.vertical_passage():
+            draw.line((x2, y1, x2, y2), fill=wall, width=wall_width)
+            draw.line((x3, y1, x3, y2), fill=wall, width=wall_width)
+            draw.line((x2, y3, x2, y4), fill=wall, width=wall_width)
+            draw.line((x3, y3, x3, y4), fill=wall, width=wall_width)
+        else:
+            draw.line((x1, y2, x2, y2), fill=wall, width=wall_width)
+            draw.line((x1, y3, x2, y3), fill=wall, width=wall_width)
+            draw.line((x3, y2, x4, y2), fill=wall, width=wall_width)
+            draw.line((x3, y3, x4, y3), fill=wall, width=wall_width)
