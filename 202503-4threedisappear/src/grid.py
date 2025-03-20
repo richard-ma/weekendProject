@@ -7,12 +7,16 @@ class Grid:
         self._rows = rows
         self._columns = columns
 
-        self._grid = []
+        self._grid = self.prepare_grid()
+
+    def prepare_grid(self):
+        ret = []
         for r in range(self._rows):
             line = list()
             for c in range(self._columns):
                 line.append(Cell())
-            self._grid.append(line)
+            ret.append(line)
+        return ret
 
     def __getitem__(self, idx):
         return self._grid[idx]
@@ -50,3 +54,18 @@ class Grid:
             output = output + bottom + "\n"
         
         return output
+
+    def load(self, filename: str):
+        with open(filename) as f:
+            for row, line in enumerate(f):
+                if row == 0:
+                    rows, cols = line.split()
+                    self._rows = int(rows)
+                    self._columns = int(cols)
+
+                    self._grid = self.prepare_grid()
+                    continue
+
+                row -= 1
+                for column, char in enumerate(line.split(' ')):
+                    self[row][column].value(int(char))
