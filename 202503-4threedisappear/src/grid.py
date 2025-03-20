@@ -28,7 +28,7 @@ class Grid:
                     yield cell
 
     def contents_of(self, cell):
-        return " "
+        return cell.value() 
 
     def __str__(self):
         output = "+" + "---+" * self._columns + "\n"
@@ -38,12 +38,11 @@ class Grid:
             bottom = "+"
             
             for cell in row:
-                cell = cell if cell else Cell(-1, -1)
-                body = " %c " % (self.contents_of(cell))
-                east_boundary = " " if (cell.is_linked(cell._east)) else "|"
+                body = " %d " % (self.contents_of(cell))
+                east_boundary = "|"
                 top = top + body + east_boundary
 
-                south_boundary = "   " if (cell.is_linked(cell._south)) else "---"
+                south_boundary = "---"
                 corner = "+"
                 bottom = bottom + south_boundary + corner
             
