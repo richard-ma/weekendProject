@@ -1,6 +1,9 @@
 class Cell:
-    def __init__(self, value: int):
-        self._value = value 
+    def __init__(self, value: int = None):
+        if value is None:
+            self._value = 0
+        else:
+            self._value = value 
 
     def value(self, value: int = None):
         if value is not None:
