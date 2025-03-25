@@ -1,4 +1,7 @@
 # RLock
+# Lock 与 RLock的区别在于RLock可以被同一个线程多次acquire，而Lock不行。
+# 但是，RLock被acquire多少次，就需要release多少次，才能被其他线程获取。
+# 也就是说，RLock的acquire和release必须成对出现，否则其他线程无法获取RLock。
 
 import threading
 import time
