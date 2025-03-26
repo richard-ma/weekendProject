@@ -1,0 +1,3 @@
+$ sudo apt install libmpich-dev    # for MPICH
+$ sudo apt install libopenmpi-dev  # for Open MPI
+$ pip install mpi4py
