@@ -9,8 +9,8 @@ if __name__ == "__main__":
     clock = pygame.time.Clock()
 
     # Load images
-    # red_image = pygame.image.load("red.png")
-    # green_image = pygame.image.load("green.png")
+    red_image = pygame.image.load("red.png")
+    green_image = pygame.image.load("green.png")
 
     # Set initial state
     current_image = None
