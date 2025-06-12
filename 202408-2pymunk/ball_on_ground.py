@@ -1,6 +1,7 @@
 import pymunk
 
 space = pymunk.Space()
+space.gravity = (0, 100)
 
 circle_body = pymunk.Body()
 circle_body.position = (100, 100)
@@ -18,12 +19,6 @@ circle_shape.elasticity = 0.8
 ground_shape.elasticity = 1 
 
 
-'''
-给物体施加力
-'''
-def func():
-    circle_body.apply_force_at_local_point((0, 10), (0, 0))
-
 if __name__ == "__main__":
     import util
-    util.run(space, func)
+    util.run(space)

@@ -21,8 +21,8 @@ def run(space, func=None):
         if func:
             s = str(func())
         else:
-            s = "FPS: {}".format(clock.get_fps())
-        
+            s = "FPS: {}".format(int(clock.get_fps()))
+
         pg.display.set_caption(s)
         screen.fill(background)
 
