@@ -36,6 +36,7 @@ if  __name__ == "__main__":
     
     clock = pg.time.Clock()
     running = True
+    pause_flg = False  # Flag to control pause state
 
     balls_number = 100 # Number of balls to create
     balls = []  # List to hold multiple balls if needed
@@ -56,10 +57,16 @@ if  __name__ == "__main__":
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 running = False
-        
+            elif event.type == pg.KEYDOWN:
+                if event.key == pg.K_ESCAPE:  # Exit on ESC key press
+                    running = False
+                elif event.key == pg.K_SPACE: # Toggle pause on space key press
+                    pause_flg = not pause_flg
+                    
         screen.fill((0, 0, 0))  # Clear the screen with black
         for ball in balls:
-            ball.update()  # Update the ball's position
+            if not pause_flg:
+                ball.update()  # Update the ball's position
             ball.draw(screen)  # Call the draw function to draw the ball
         pg.display.flip()  # Update the display
         
