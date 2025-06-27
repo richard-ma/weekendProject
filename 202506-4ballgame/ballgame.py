@@ -1,4 +1,5 @@
 import pygame as pg
+import random
 
 WIDTH = 800
 HEIGHT = 600
@@ -35,7 +36,9 @@ if  __name__ == "__main__":
     clock = pg.time.Clock()
     running = True
 
-    ball = Ball(400, 300, 5)
+    dx = random.choice([-3, 3])  # Randomly choose initial direction
+    dy = random.choice([-3, 3])  # Randomly choose initial direction
+    ball = Ball(400, 300, 10, dx, dy)
 
     while running:
         for event in pg.event.get():
