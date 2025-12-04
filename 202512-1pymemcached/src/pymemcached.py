@@ -1,6 +1,16 @@
 import socketserver
 import threading
 
+class CachedData:
+    def __init__(self):
+        self.store = dict()
+
+    def set(self, key, value):
+        self.store[key] = value
+
+    def get(self, key):
+        return self.store.get(key, None)
+
 # 定义请求处理器类，继承自 BaseRequestHandler
 class MyRequestHandler(socketserver.BaseRequestHandler):
     def handle(self):
