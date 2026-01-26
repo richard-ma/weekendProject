@@ -17,7 +17,7 @@ light_rgbs = {
 
 dark_rgbs = {
     'black': (0, 0, 0),
-    # 'kodak-black': (20, 60, 70),
+    'kodak-black': (20, 60, 70),
 }
 
 def binarize_and_replace_color(img, dark_rgb, light_rgb):
