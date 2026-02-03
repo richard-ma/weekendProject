@@ -13,7 +13,7 @@ class TestMemcachedServer(unittest.TestCase):
         try:
             cls.mc = memcache.Memcache(
                 ['127.0.0.1:11211'],
-                debug=0,  # 关闭debug输出，避免干扰测试
+                debug=1,  # 关闭debug输出，避免干扰测试
                 timeout=5  # 连接超时5秒
             )
             # 验证连接是否成功
