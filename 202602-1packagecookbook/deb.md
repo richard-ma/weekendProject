@@ -80,3 +80,28 @@ Deb包是Linux发行版Debian采用的包管理系统默认的包格式，许多
 ### 执行打包命令
     # 语法：dpkg-deb --build [打包根目录] [输出文件名]
     dpkg-deb --build myapp_1.0.0_amd64 myapp_1.0.0_amd64.deb
+
+## Deb包信息校验
+
+### 查看包内部信息
+    # 查看control信息
+    dpkg -I myapp_1.0.0_amd64.deb
+    # 查看包内所有文件列表
+    dpkg -c myapp_1.0.0_amd64.deb
+    # 解压deb包查看原始结构（验证三部分）
+    dpkg-deb -R myapp_1.0.0_amd64.deb extract_dir/
+
+## 安装测试
+
+    # 安装（-i=install，-f修复依赖）
+    sudo dpkg -i myapp_1.0.0_amd64.deb
+    sudo apt -f install  # 补全缺失依赖
+
+    # 验证安装
+    which myapp
+    dpkg -l | grep myapp
+
+    # 卸载（保留配置）
+    sudo dpkg -r myapp
+    # 彻底卸载（删除配置）
+    sudo dpkg -P myapp
