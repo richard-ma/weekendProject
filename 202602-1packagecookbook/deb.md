@@ -33,4 +33,26 @@ Deb包是Linux发行版Debian采用的包管理系统默认的包格式，许多
 
     1. DEBIAN目录中的所有文件都是存放包信息的文件
     1. 其他目录中（/usr /etc等）的文件是软件要使用的文件，会被复制到系统对应的目录中
-1. 
+1. 编写包元数据核心文件DEBIAN/control
+
+    Package: myapp  
+    Version: 1.0.0  
+    Section: utils  
+    Priority: optional  
+    Architecture: amd64  
+    Depends: libc6 (>= 2.17), curl  
+    Recommends: git  
+    Suggests: vim  
+    Maintainer: Your Name \<your@email.com\>  
+    Description: A custom demo application  
+      Longer description of myapp.  
+      This is the second line of detailed description.  
+      It can explain functions, usage, features.  
+    Homepage: https://your-domain.com  
+
+    * Package：包名，小写字母 + 数字 + 短横线，无空格
+    * Version：版本号，格式主版.次版.修订版
+    * Architecture：架构，常见amd64(x86_64)、arm64、all(跨架构脚本 / 纯数据)
+    * Depends：强制依赖，系统安装此包前必须已装的软件
+    * Maintainer：维护者信息，格式名称 <邮箱>
+    * Description：首行短描述，换行后空两格写长描述
