@@ -1,0 +1,14 @@
+Package: myapp  
+Version: 1.0.0  
+Section: utils  
+Priority: optional  
+Architecture: amd64  
+Depends: libc6 (>= 2.17), curl  
+Recommends: git  
+Suggests: vim  
+Maintainer: Your Name \<your@email.com\>  
+Description: A custom demo application  
+  Longer description of myapp.  
+  This is the second line of detailed description.  
+  It can explain functions, usage, features.  
+Homepage: https://your-domain.com 
