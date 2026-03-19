@@ -139,8 +139,8 @@ class Maze:
                         self.grid[y][x] = True
             
             # 更新起点和终点
-            self.start = (0, 0)
-            self.end = (self.width-1, self.height-1)
+            self.start = (1, 1)
+            self.end = (self.width-2, self.height-2)
             
             # 确保起点和终点是通路（如果被墙壁覆盖）
             self.grid[self.start[1]][self.start[0]] = False
