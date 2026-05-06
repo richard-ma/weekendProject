@@ -17,3 +17,7 @@ class BinaryTree:
 
             if neighbor:
                 cell.link(neighbor)
+
+# 上边和右边的墙随机打通，生成迷宫
+# 起点在左下角，终点在右上角
+# 缺点：第一行和最后一列永远是通路，缺乏变化，迷宫的复杂度较低
