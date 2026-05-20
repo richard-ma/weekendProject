@@ -12,8 +12,8 @@ class AldousBroder:
         while unvisited > 0:
             neighbor = random.choice(cell.neighbors())
 
-            if len(neighbor.links()) == 0:
+            if len(neighbor.links()) == 0: # 当所有邻居都有连接时，当前单元格为死胡同
                 cell.link(neighbor)
-                unvisited -= 1
+                unvisited -= 1 # 保证会访问每一个单元格
             
             cell = neighbor
