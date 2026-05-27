@@ -36,3 +36,14 @@
 * src/aldous_broder.py
 * aldous_broder_demo.py
 * aldous_broder.png
+
+## hunt_and_kill
+* 基本做法和aldous_broder相同
+* 随机选择起点作为当前单元格
+* 随机选择邻居与当前单元格连接
+* 遍历所有单元格，寻找无连接的单元格，将其和有连接的邻居连接
+* 优点：迷宫随机度高且比较均匀
+* 缺点：效率比aldous_broder高，但整体仍需要多次遍历
+* src/hunt_and_kill.py
+* hunt_and_kill_demo.py
+* hunt_and_kill.png
